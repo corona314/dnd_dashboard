@@ -50,14 +50,16 @@ vida_vars = []
 heridas_vars = []
 shock_vars = []
 barra_vida = []
+estado_labels = []
 
 def actualizar_valores(index):
     p = personajes[index]
     vida_vars[index].set(p["vida_actual"])
+    barra_vida[index]["maximum"] = p["vida_max"]  # <-- actualizar máximo
+    vida_labels[index]["text"] = f"{p['vida_actual']} / {p['vida_max']} PV"
     heridas_vars[index].set(p["heridas"])
     shock_vars[index].set(p["shock"])
-    barra_vida[index]["value"] = p["vida_actual"]
-    vida_labels[index]["text"] = f"{p['vida_actual']} / {p['vida_max']} PV"
+    estado_labels[index]["text"] = ", ".join(p.get("estados", []))
 
 def modificar(index, tipo, cantidad):
     p = personajes[index]
@@ -67,9 +69,9 @@ def modificar(index, tipo, cantidad):
         heridas_antes = p["heridas"]
         p["heridas"] = max(0, p["heridas"] + cantidad)
 
-        # Subir heridas: solo aumenta shock si superas 4 heridas
+        # Subir heridas: solo aumenta shock si superas 3 heridas
         if cantidad > 0 and p["heridas"] > 3:
-            nuevas_heridas = max(0, p["heridas"] - max(4, heridas_antes))
+            nuevas_heridas = max(0, p["heridas"] - max(3, heridas_antes))
             if nuevas_heridas > 0:
                 p["shock"] = min(3, p["shock"] + nuevas_heridas)
 
@@ -88,9 +90,6 @@ personajes = cargar_personajes()
 def run_tkinter():
     root = tk.Tk()
     root.title("Control DnD")
-
-    # Variables y etiquetas para estados
-    estado_labels = []
 
     # Variables para seleccionar personaje y estado
     estado_seleccionado = tk.StringVar()
@@ -186,7 +185,7 @@ def run_tkinter():
     # Crear los frames de cada personaje
     for i, p in enumerate(personajes):
         frame = ttk.Frame(root, padding=10)
-        frame.grid(row=i//2, column=i%2, padx=10, pady=10)
+        frame.grid(row=i//3, column=i%3, padx=10, pady=10)
 
         ttk.Label(frame, text=p["nombre"], font=("Arial", 14, "bold")).grid(row=0, column=0, columnspan=2)
 
@@ -195,36 +194,62 @@ def run_tkinter():
         vida_var = tk.IntVar(value=p["vida_actual"])
         vida_vars.append(vida_var)
         barra = ttk.Progressbar(frame, maximum=p["vida_max"], length=150, variable=vida_var)
-        barra.grid(row=1, column=1)
+        barra.grid(row=1, column=1, columnspan=2)
         barra_vida.append(barra)
         vida_label = tk.Label(frame, text=f"{p['vida_actual']} / {p['vida_max']} PV")
-        vida_label.grid(row=1, column=2, sticky="w")
+        vida_label.grid(row=2, column=0, columnspan=3, sticky="w")
         vida_labels.append(vida_label)
 
-        # Botones de vida
-        ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i,"vida",1)).grid(row=2, column=0)
-        ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i,"vida",-1)).grid(row=2, column=1)
+        # Entrada para modificar vida actual
+        vida_input = tk.StringVar(value="0")
+        ttk.Entry(frame, width=5, textvariable=vida_input).grid(row=3, column=0)
+        ttk.Button(frame, text="Aplicar", width=6, command=lambda i=i, v=vida_input: modificar(i, "vida", int(v.get()) if v.get().lstrip("-").isdigit() else 0)).grid(row=3, column=1)
+
+        # Entrada para modificar vida máxima
+        vida_max_input = tk.StringVar(value=str(p["vida_max"]))
+        ttk.Entry(frame, width=5, textvariable=vida_max_input).grid(row=3, column=2)
+        def aplicar_vida_max(i=i, v_max=vida_max_input):
+            try:
+                nuevo_max = int(v_max.get())
+                if nuevo_max < 1:
+                    return
+                personajes[i]["vida_max"] = nuevo_max
+                # Ajustar vida actual si supera el nuevo máximo
+                if personajes[i]["vida_actual"] > nuevo_max:
+                    personajes[i]["vida_actual"] = nuevo_max
+                # Actualizar barra de vida
+                barra_vida[i]["maximum"] = nuevo_max
+                actualizar_valores(i)
+                guardar_personajes(personajes)
+            except ValueError:
+                pass
+        ttk.Button(frame, text="Aplicar Max", width=10, command=aplicar_vida_max).grid(row=3, column=3)
+
+        # Botones +1/-1 para vida
+        ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i, "vida", 1)).grid(row=4, column=0)
+        ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i, "vida", -1)).grid(row=4, column=1)
 
         # Heridas
-        ttk.Label(frame, text="Heridas:").grid(row=3, column=0, sticky="w")
+        ttk.Label(frame, text="Heridas:").grid(row=5, column=0, sticky="w")
         heridas_var = tk.IntVar(value=p["heridas"])
         heridas_vars.append(heridas_var)
-        ttk.Label(frame, textvariable=heridas_var).grid(row=3, column=1, sticky="w")
-        ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i,"heridas",1)).grid(row=4, column=0)
-        ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i,"heridas",-1)).grid(row=4, column=1)
+        ttk.Label(frame, textvariable=heridas_var).grid(row=5, column=1, sticky="w")
+        ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i,"heridas",1)).grid(row=6, column=0)
+        ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i,"heridas",-1)).grid(row=6, column=1)
 
         # Shock
-        ttk.Label(frame, text="Shock:").grid(row=5, column=0, sticky="w")
+        ttk.Label(frame, text="Shock:").grid(row=7, column=0, sticky="w")
         shock_var = tk.IntVar(value=p["shock"])
         shock_vars.append(shock_var)
-        ttk.Label(frame, textvariable=shock_var).grid(row=5, column=1, sticky="w")
-        ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i,"shock",1)).grid(row=6, column=0)
-        ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i,"shock",-1)).grid(row=6, column=1)
+        ttk.Label(frame, textvariable=shock_var).grid(row=7, column=1, sticky="w")
+        ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i,"shock",1)).grid(row=8, column=0)
+        ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i,"shock",-1)).grid(row=8, column=1)
 
         # Label de estados
         lbl_estados = tk.Label(frame, text=", ".join(p.get("estados", [])), wraplength=180, justify="left")
-        lbl_estados.grid(row=7, column=0, columnspan=3, sticky="w")
+        lbl_estados.grid(row=9, column=0, columnspan=3, sticky="w")
         estado_labels.append(lbl_estados)
+
 
     # Modificar actualizar_valores para actualizar los estados
     def actualizar_valores(index):
