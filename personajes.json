@@ -1,51 +1,47 @@
 [
     {
-        "nombre": "Vae",
-        "vida_actual": 28,
-        "vida_max": 40,
-        "heridas": 5,
-        "shock": 3,
+        "nombre": "Vaelora",
+        "vida_actual": 20,
+        "vida_max": 20,
+        "heridas": 0,
+        "shock": 0,
         "imagen": "vaelora.png",
         "estados": []
     },
     {
         "nombre": "Ken",
-        "vida_actual": 32,
-        "vida_max": 40,
+        "vida_actual": 20,
+        "vida_max": 20,
         "heridas": 0,
         "shock": 0,
         "imagen": "ken.png",
-        "estados": [
-            "Asustado",
-            "Aturdido",
-            "Incapacitado"
-        ]
+        "estados": []
     },
     {
         "nombre": "Adelgo",
-        "vida_actual": 35,
-        "vida_max": 40,
+        "vida_actual": 20,
+        "vida_max": 20,
         "heridas": 0,
         "shock": 0,
-        "imagen": "ken.png",
+        "imagen": "adelgo.jpeg",
         "estados": []
     },
     {
         "nombre": "Lillie",
         "vida_actual": 20,
-        "vida_max": 40,
+        "vida_max": 20,
         "heridas": 0,
         "shock": 0,
-        "imagen": "ken.png",
+        "imagen": "lillie.png",
         "estados": []
     },
     {
         "nombre": "Jormungandr",
-        "vida_actual": 63,
-        "vida_max": 63,
+        "vida_actual": 20,
+        "vida_max": 20,
         "heridas": 0,
         "shock": 0,
-        "imagen": "vaelora.png",
+        "imagen": "jormungandr.jpg",
         "estados": []
     }
 ]
