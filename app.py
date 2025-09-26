@@ -181,7 +181,6 @@ def run_tkinter():
                 guardar_personajes(personajes)
                 actualizar_valores(personajes.index(p))
                 break
-
     ttk.Button(root, text="Quitar estado", command=quitar_estado).grid(row=103, column=0, columnspan=2)
 
     # Crear los frames de cada personaje

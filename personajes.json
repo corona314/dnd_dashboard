@@ -1,7 +1,7 @@
 [
     {
         "nombre": "Vae",
-        "vida_actual": 33,
+        "vida_actual": 40,
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
@@ -10,16 +10,20 @@
     },
     {
         "nombre": "Ken",
-        "vida_actual": 20,
+        "vida_actual": 32,
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
         "imagen": "ken.png",
-        "estados": []
+        "estados": [
+            "Asustado",
+            "Aturdido",
+            "Incapacitado"
+        ]
     },
     {
         "nombre": "Adelgo",
-        "vida_actual": 20,
+        "vida_actual": 35,
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
