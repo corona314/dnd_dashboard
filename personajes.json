@@ -5,7 +5,8 @@
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
-        "imagen": "vaelora.png"
+        "imagen": "vaelora.png",
+        "estados": []
     },
     {
         "nombre": "Ken",
@@ -13,7 +14,8 @@
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
-        "imagen": "ken.png"
+        "imagen": "ken.png",
+        "estados": []
     },
     {
         "nombre": "Adelgo",
@@ -21,7 +23,8 @@
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
-        "imagen": "ken.png"
+        "imagen": "ken.png",
+        "estados": []
     },
     {
         "nombre": "Lillie",
@@ -29,7 +32,8 @@
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
-        "imagen": "ken.png"
+        "imagen": "ken.png",
+        "estados": []
     },
     {
         "nombre": "Jormungandr",
@@ -37,6 +41,7 @@
         "vida_max": 40,
         "heridas": 0,
         "shock": 0,
-        "imagen": "vaelora.png"
+        "imagen": "vaelora.png",
+        "estados": []
     }
 ]

@@ -33,6 +33,13 @@
     width: 0%;
     transition: width 0.5s;
 }
+
+.estados {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #eee;
+    text-align: left;
+}
 </style>
 </head>
 <body>
@@ -45,6 +52,13 @@
         <div class="vida"><div class="barra" style="width: {{ (p.vida_actual / p.vida_max) * 100 }}%;"></div></div>
         <p>Heridas: {{ p.heridas }}</p>
         <p>Shock: {{ p.shock }}</p>
+        <div class="estados">
+            {% if p.estados %}
+                Estados: {{ p.estados | join(', ') }}
+            {% else %}
+                Estados: Ninguno
+            {% endif %}
+        </div>
     </div>
     {% endfor %}
 </div>
@@ -63,6 +77,9 @@ async function actualizarDashboard(){
             <div class="vida"><div class="barra" style="width:${(p.vida_actual/p.vida_max*100)}%"></div></div>
             <p>Heridas: ${p.heridas}</p>
             <p>Shock: ${p.shock}</p>
+            <div class="estados">
+                Estados: ${p.estados && p.estados.length ? p.estados.join(', ') : 'Ninguno'}
+            </div>
         </div>`;
     });
 }
