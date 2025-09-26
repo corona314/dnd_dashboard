@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard DnD</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+.personajes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.personaje {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.vida {
+    background: #eee;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.barra {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0%;
+    transition: width 0.5s;
+}
+</style>
+</head>
+<body>
+<h1>Personajes</h1>
+<div class="personajes" id="personajes-dashboard">
+    {% for p in personajes %}
+    <div class="personaje">
+        <h2>{{ p.nombre }}</h2>
+        <img src="{{ url_for('static', filename='images/' + p.imagen) }}" alt="{{ p.nombre }}" width="100">
+        <div class="vida"><div class="barra" style="width: {{ (p.vida_actual / p.vida_max) * 100 }}%;"></div></div>
+        <p>Heridas: {{ p.heridas }}</p>
+        <p>Shock: {{ p.shock }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+async function actualizarDashboard(){
+    const res = await fetch('/dashboard-data');
+    const data = await res.json();
+    const cont = document.getElementById('personajes-dashboard');
+    cont.innerHTML = '';
+    data.personajes.forEach(p => {
+        cont.innerHTML += `
+        <div class="personaje">
+            <h2>${p.nombre}</h2>
+            <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
+            <div class="vida"><div class="barra" style="width:${(p.vida_actual/p.vida_max*100)}%"></div></div>
+            <p>Heridas: ${p.heridas}</p>
+            <p>Shock: ${p.shock}</p>
+        </div>`;
+    });
+}
+
+// Actualizar cada 2 segundos
+setInterval(actualizarDashboard, 2000);
+</script>
+</body>
+</html>

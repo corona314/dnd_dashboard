@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    text-align: center;
+}
+
+.personajes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.personaje {
+    border: 1px solid white;
+    margin: 10px;
+    padding: 10px;
+    width: 150px;
+    background-color: #2e2e2e;
+    border-radius: 8px;
+}
+
+.personaje img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.vida {
+    background-color: #555;
+    border-radius: 5px;
+    margin: 5px 0;
+    height: 15px;
+}
+
+.barra {
+    background-color: #0f0;
+    height: 100%;
+    border-radius: 5px;
+}
