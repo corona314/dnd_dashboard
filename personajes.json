@@ -1,35 +1,35 @@
 [
     {
         "nombre": "Vaelora",
-        "vida_actual": 14,
-        "vida_max": 29,
-        "heridas": 2,
+        "vida_actual": 15,
+        "vida_max": 15,
+        "heridas": 0,
         "shock": 0,
         "imagen": "vaelora.png",
         "estados": [],
-        "iniciativa": 5,
+        "iniciativa": 1,
         "turno": false
     },
     {
         "nombre": "Ken",
-        "vida_actual": 14,
-        "vida_max": 20,
-        "heridas": 2,
-        "shock": 1,
+        "vida_actual": 8,
+        "vida_max": 16,
+        "heridas": 0,
+        "shock": 0,
         "imagen": "ken.png",
         "estados": [],
-        "iniciativa": 11,
+        "iniciativa": 1,
         "turno": false
     },
     {
         "nombre": "Adelgo",
         "vida_actual": 20,
-        "vida_max": 20,
-        "heridas": 4,
+        "vida_max": 74,
+        "heridas": 0,
         "shock": 0,
         "imagen": "adelgo.jpeg",
         "estados": [],
-        "iniciativa": 14,
+        "iniciativa": 1,
         "turno": false
     },
     {
@@ -37,21 +37,24 @@
         "vida_actual": 7,
         "vida_max": 20,
         "heridas": 0,
-        "shock": 2,
+        "shock": 0,
         "imagen": "lillie.png",
         "estados": [],
-        "iniciativa": 18,
-        "turno": true
+        "iniciativa": 1,
+        "turno": false
     },
     {
         "nombre": "Jogur",
         "vida_actual": 20,
         "vida_max": 20,
-        "heridas": 2,
-        "shock": 3,
+        "heridas": 0,
+        "shock": 0,
         "imagen": "jormungandr.jpg",
-        "estados": [],
-        "iniciativa": 2,
-        "turno": false
+        "estados": [
+            "Aturdido",
+            "Incapacitado"
+        ],
+        "iniciativa": 1,
+        "turno": true
     }
 ]

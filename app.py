@@ -103,12 +103,12 @@ def run_tkinter():
 
     # Combobox de selección de personaje
     ttk.Label(root, text="Personaje:").grid(row=100, column=0, sticky="w")
-    personaje_menu = ttk.Combobox(root, values=[p["nombre"] for p in personajes], textvariable=personaje_seleccionado)
+    personaje_menu = ttk.Combobox(root, values=[p["nombre"] for p in personajes], textvariable=personaje_seleccionado, state="readonly")
     personaje_menu.grid(row=100, column=1)
 
     # Combobox de selección de estado
     ttk.Label(root, text="Estado:").grid(row=101, column=0, sticky="w")
-    estado_menu = ttk.Combobox(root, values=estados_disponibles, textvariable=estado_seleccionado)
+    estado_menu = ttk.Combobox(root, values=estados_disponibles, textvariable=estado_seleccionado, state="readonly")
     estado_menu.grid(row=101, column=1)
 
     # Botón para agregar estado
@@ -272,7 +272,7 @@ def run_tkinter():
 
         # Label de estados
         lbl_estados = tk.Label(frame, text=", ".join(p.get("estados", [])), wraplength=180, justify="left")
-        lbl_estados.grid(row=9, column=0, columnspan=3, sticky="w")
+        lbl_estados.grid(row=10, column=0, columnspan=3, sticky="w")
         estado_labels.append(lbl_estados)
 
 
@@ -290,7 +290,7 @@ def run_tkinter():
     def actualizar_turnos():
         for i, p in enumerate(personajes):
             if p.get("turno"):
-                nombre_labels[i].configure(foreground="yellow")  # color del turno
+                nombre_labels[i].configure(foreground="#C0C000")  # color turno
             else:
                 nombre_labels[i].configure(foreground="black")   # color normal
 
