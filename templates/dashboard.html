@@ -42,6 +42,12 @@
         border-radius: 50%;
     }
 
+    .personaje.turno {
+        border: 2px solid yellow;
+        box-shadow: 0 0 15px yellow;
+        transform: scale(1.05);
+    }
+
     .cabecera {
         display: flex;
         align-items: center;
@@ -163,8 +169,11 @@
                    : p.shock == 2 ? "shock-critico" 
                    : p.shock == 3 ? "shock-muerte" 
                    : "";
+            const clases = [claseShock];
+            if (p.turno) clases.push("turno");
+
             cont.innerHTML += `
-            <div class="personaje ${claseShock}">
+            <div class="personaje ${clases.join(" ")}">
                 <div class="cabecera">
                     <div class="iniciativa">${p.iniciativa ?? '-'}</div>
                     <h2>${p.nombre}</h2>

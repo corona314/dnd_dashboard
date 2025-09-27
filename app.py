@@ -185,13 +185,18 @@ def run_tkinter():
     # Variables para turno
     turno_indices = sorted(range(len(personajes)), key=lambda i: personajes[i].get("iniciativa", 0), reverse=True)
     turno_actual = 0
+    nombre_labels = []
 
+    frames = []
     # Crear los frames de cada personaje
     for i, p in enumerate(personajes):
         frame = ttk.Frame(root, padding=10)
         frame.grid(row=i//3, column=i%3, padx=10, pady=10)
+        frames.append(frame)
 
-        ttk.Label(frame, text=p["nombre"], font=("Arial", 14, "bold")).grid(row=0, column=0, columnspan=2)
+        lbl_nombre = ttk.Label(frame, text=p["nombre"], font=("Arial", 14, "bold"), foreground="white")
+        lbl_nombre.grid(row=0, column=0, columnspan=2)
+        nombre_labels.append(lbl_nombre)
 
         # Barra de vida
         ttk.Label(frame, text="Vida:").grid(row=1, column=0, sticky="w")
@@ -254,6 +259,7 @@ def run_tkinter():
         ttk.Label(frame, text="Inic.:").grid(row=9, column=0, sticky="w", padx=5)
         iniciativa_var = tk.StringVar(value=str(p.get("iniciativa", 0)))
         ttk.Entry(frame, width=5, textvariable=iniciativa_var).grid(row=9, column=1)
+        
         def aplicar_iniciativa(i=i, v_inic=iniciativa_var):
             try:
                 nuevo_valor = int(v_inic.get())
@@ -281,16 +287,24 @@ def run_tkinter():
         estado_labels[index]["text"] = ", ".join(p.get("estados", []))
         
 
+    def actualizar_turnos():
+        for i, p in enumerate(personajes):
+            if p.get("turno"):
+                nombre_labels[i].configure(foreground="yellow")  # color del turno
+            else:
+                nombre_labels[i].configure(foreground="black")   # color normal
+
     def pasar_turno():
         nonlocal turno_actual
         for p in personajes:
             p["turno"] = False
         idx = turno_indices[turno_actual]
         personajes[idx]["turno"] = True
-        actualizar_valores(idx)
-        guardar_personajes(personajes)
+        actualizar_turnos()
         turno_actual = (turno_actual + 1) % len(turno_indices)
-        
+        guardar_personajes(personajes)
+
+
     # Botón pasar turno
     ttk.Button(root, text="Pasar turno", command=pasar_turno).grid(row=104, column=0, columnspan=2, pady=10)
 
