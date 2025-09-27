@@ -181,6 +181,11 @@ def run_tkinter():
                 break
     ttk.Button(root, text="Quitar estado", command=quitar_estado).grid(row=103, column=0, columnspan=2)
 
+
+    # Variables para turno
+    turno_indices = sorted(range(len(personajes)), key=lambda i: personajes[i].get("iniciativa", 0), reverse=True)
+    turno_actual = 0
+
     # Crear los frames de cada personaje
     for i, p in enumerate(personajes):
         frame = ttk.Frame(root, padding=10)
@@ -274,7 +279,22 @@ def run_tkinter():
         barra_vida[index]["value"] = p["vida_actual"]
         vida_labels[index]["text"] = f"{p['vida_actual']} / {p['vida_max']} PV"
         estado_labels[index]["text"] = ", ".join(p.get("estados", []))
+        
 
+    def pasar_turno():
+        nonlocal turno_actual
+        for p in personajes:
+            p["turno"] = False
+        idx = turno_indices[turno_actual]
+        personajes[idx]["turno"] = True
+        actualizar_valores(idx)
+        guardar_personajes(personajes)
+        turno_actual = (turno_actual + 1) % len(turno_indices)
+        
+    # Botón pasar turno
+    ttk.Button(root, text="Pasar turno", command=pasar_turno).grid(row=104, column=0, columnspan=2, pady=10)
+
+    pasar_turno()  # Iniciar el primer turno
     root.mainloop()
 
 

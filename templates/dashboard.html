@@ -11,7 +11,7 @@
         color: white;
         text-align: center;
     }
-
+    
     .personajes {
         display: flex;
         flex-wrap: nowrap;
@@ -27,7 +27,13 @@
         background-color: #2e2e2e;
         border-radius: 8px;
         color: white;
-        transition: background-color 0.5s;
+        transition: transform 0.3s, box-shadow 0.3s;
+
+    }
+    
+    .personaje:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     }
 
     .personaje img {
@@ -79,7 +85,6 @@
         justify-content: center;
     }
 
-    /* Badges de estados */
     .estado {
         padding: 2px 6px;
         border-radius: 4px;
