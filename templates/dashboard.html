@@ -6,12 +6,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
     body {
-    font-family: Arial, sans-serif;
-    background-color: #1e1e1e;
-    color: white;
-    text-align: center;
+        font-family: Arial, sans-serif;
+        background-color: #1e1e1e;
+        color: white;
+        text-align: center;
     }
-    
+
     .personajes {
         display: flex;
         flex-wrap: nowrap;
@@ -27,15 +27,15 @@
         background-color: #2e2e2e;
         border-radius: 8px;
         color: white;
+        transition: background-color 0.5s;
     }
 
     .personaje img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
     }
 
-    /* Cabecera con iniciativa + nombre */
     .cabecera {
         display: flex;
         align-items: center;
@@ -52,7 +52,7 @@
             -1px -1px 0 #000,  
             1px -1px 0 #000,
             -1px  1px 0 #000,
-            1px  1px 0 #000; /* contorno negro */
+            1px  1px 0 #000; 
     }
 
     .vida {
@@ -103,35 +103,36 @@
     .estado.Invisible { background-color: #7f8c8d; }
     .estado.Paralizado { background-color: #53ebac; }
     .estado.Petrificado { background-color: #5e2500; }
+
+    /* Animación de parpadeo rojo */
+    @keyframes parpadeo-rojo {
+    0% { background-color: #2e2e2e; }
+    50% { background-color: #ff0000ab; }
+    100% { background-color: #2e2e2e; }
+}
+    /* Animación de parpadeo naranja */
+    @keyframes parpadeo-naranja {
+        0% { background-color: #2e2e2e; }
+        50% { background-color: #ff8000ab; }
+        100% { background-color: #2e2e2e; }
+    }
+
+    .personaje.shock-critico {
+        animation: parpadeo-rojo 2s infinite;
+    }
+    .personaje.shock {
+        animation: parpadeo-naranja 2s infinite;
+    }
+    .personaje.shock-muerte {
+        background-color: #000000;
+        animation: none;        
+    }
+
     </style>
     </head>
     <body>
     <h1>Personajes</h1>
-    <div class="personajes" id="personajes-dashboard">
-        {% for p in personajes %}
-        <div class="personaje">
-            <div class="cabecera">
-                <div class="iniciativa">{{ p.iniciativa }}</div>
-                <h2>{{ p.nombre }}</h2>
-            </div>
-            <img src="{{ url_for('static', filename='images/' + p.imagen) }}" alt="{{ p.nombre }}" width="100">
-            <div class="vida">
-                <div class="barra" style="width: {{ (p.vida_actual / p.vida_max) * 100 }}%; background-color: {% if (p.vida_actual / p.vida_max) > 0.6 %}#0f0{% elif (p.vida_actual / p.vida_max) > 0.3 %}#f1c40f{% else %}#e74c3c{% endif %};"></div>
-            </div>
-            <p>Heridas: {{ p.heridas }}</p>
-            <p>Shock: {{ p.shock }}</p>
-            <div class="estados">
-                {% if p.estados %}
-                    {% for est in p.estados %}
-                        <span class="estado {{ est }}">{{ est }}</span>
-                    {% endfor %}
-                {% else %}
-                    <span class="estado">Ninguno</span>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+    <div class="personajes" id="personajes-dashboard"></div>
 
     <script>
     function colorBarra(vida_actual, vida_max) {
@@ -153,8 +154,12 @@
                 : `<span class="estado">Ninguno</span>`;
             const ancho = (p.vida_actual / p.vida_max) * 100;
             const color = colorBarra(p.vida_actual, p.vida_max);
+            const claseShock = p.shock == 1 ? "shock" 
+                   : p.shock == 2 ? "shock-critico" 
+                   : p.shock == 3 ? "shock-muerte" 
+                   : "";
             cont.innerHTML += `
-            <div class="personaje">
+            <div class="personaje ${claseShock}">
                 <div class="cabecera">
                     <div class="iniciativa">${p.iniciativa ?? '-'}</div>
                     <h2>${p.nombre}</h2>
@@ -168,6 +173,7 @@
         });
     }
 
+    // Actualizar cada 2 segundos
     setInterval(actualizarDashboard, 2000);
     </script>
     </body>

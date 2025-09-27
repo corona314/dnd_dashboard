@@ -1,9 +1,9 @@
 [
     {
         "nombre": "Vaelora",
-        "vida_actual": 20,
+        "vida_actual": 12,
         "vida_max": 20,
-        "heridas": 0,
+        "heridas": 2,
         "shock": 0,
         "imagen": "vaelora.png",
         "estados": [],
@@ -11,9 +11,9 @@
     },
     {
         "nombre": "Ken",
-        "vida_actual": 20,
+        "vida_actual": 8,
         "vida_max": 20,
-        "heridas": 0,
+        "heridas": 2,
         "shock": 0,
         "imagen": "ken.png",
         "estados": [],
@@ -23,7 +23,7 @@
         "nombre": "Adelgo",
         "vida_actual": 20,
         "vida_max": 20,
-        "heridas": 0,
+        "heridas": 4,
         "shock": 0,
         "imagen": "adelgo.jpeg",
         "estados": [],
@@ -31,19 +31,19 @@
     },
     {
         "nombre": "Lillie",
-        "vida_actual": 20,
+        "vida_actual": 7,
         "vida_max": 20,
         "heridas": 0,
         "shock": 0,
         "imagen": "lillie.png",
         "estados": [],
-        "iniciativa": 1
+        "iniciativa": 18
     },
     {
         "nombre": "Jogur",
         "vida_actual": 20,
         "vida_max": 20,
-        "heridas": 0,
+        "heridas": 2,
         "shock": 0,
         "imagen": "jormungandr.jpg",
         "estados": [],
