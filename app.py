@@ -38,11 +38,10 @@ def actualizar():
 @app.route("/dashboard-data")
 def dashboard_data():
     personajes = cargar_personajes()
-    # Asegurar que todos los personajes tengan 'estados'
-    for p in personajes:
-        if "estados" not in p:
-            p["estados"] = []
-    return jsonify({"personajes": personajes})
+    # Ordenar por iniciativa
+    personajes_ordenados = sorted(personajes, key=lambda p: p.get("iniciativa", 0), reverse=True)
+    return jsonify({"personajes": personajes_ordenados})
+
 
 # --- Tkinter ---
 vida_labels = []
@@ -223,7 +222,7 @@ def run_tkinter():
                 guardar_personajes(personajes)
             except ValueError:
                 pass
-        ttk.Button(frame, text="Aplicar Max", width=10, command=aplicar_vida_max).grid(row=3, column=3)
+        ttk.Button(frame, text="V.Max", width=10, command=aplicar_vida_max).grid(row=3, column=3)
 
         # Botones +1/-1 para vida
         ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i, "vida", 1)).grid(row=4, column=0)
@@ -244,6 +243,21 @@ def run_tkinter():
         ttk.Label(frame, textvariable=shock_var).grid(row=7, column=1, sticky="w")
         ttk.Button(frame, text="+", width=3, command=lambda i=i: modificar(i,"shock",1)).grid(row=8, column=0)
         ttk.Button(frame, text="-", width=3, command=lambda i=i: modificar(i,"shock",-1)).grid(row=8, column=1)
+
+
+        # Iniciativa
+        ttk.Label(frame, text="Inic.:").grid(row=9, column=0, sticky="w", padx=5)
+        iniciativa_var = tk.StringVar(value=str(p.get("iniciativa", 0)))
+        ttk.Entry(frame, width=5, textvariable=iniciativa_var).grid(row=9, column=1)
+        def aplicar_iniciativa(i=i, v_inic=iniciativa_var):
+            try:
+                nuevo_valor = int(v_inic.get())
+                personajes[i]["iniciativa"] = nuevo_valor
+                guardar_personajes(personajes)
+                actualizar_valores(i)
+            except ValueError:
+                pass
+        ttk.Button(frame, text="Aplicar", width=6, command=aplicar_iniciativa).grid(row=9, column=2)
 
         # Label de estados
         lbl_estados = tk.Label(frame, text=", ".join(p.get("estados", [])), wraplength=180, justify="left")

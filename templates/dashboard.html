@@ -7,7 +7,7 @@
 <style>
 .personajes {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 20px;
     justify-content: center;
 }
@@ -20,6 +20,26 @@
     background-color: #2e2e2e;
     border-radius: 8px;
     color: white;
+}
+
+/* Cabecera con iniciativa + nombre */
+.cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.iniciativa {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000; /* contorno negro */
 }
 
 .vida {
@@ -77,7 +97,10 @@
 <div class="personajes" id="personajes-dashboard">
     {% for p in personajes %}
     <div class="personaje">
-        <h2>{{ p.nombre }}</h2>
+        <div class="cabecera">
+            <div class="iniciativa">{{ p.iniciativa }}</div>
+            <h2>{{ p.nombre }}</h2>
+        </div>
         <img src="{{ url_for('static', filename='images/' + p.imagen) }}" alt="{{ p.nombre }}" width="100">
         <div class="vida">
             <div class="barra" style="width: {{ (p.vida_actual / p.vida_max) * 100 }}%; background-color: {% if (p.vida_actual / p.vida_max) > 0.6 %}#0f0{% elif (p.vida_actual / p.vida_max) > 0.3 %}#f1c40f{% else %}#e74c3c{% endif %};"></div>
@@ -100,11 +123,9 @@
 <script>
 function colorBarra(vida_actual, vida_max) {
     const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));
-
-    // Componentes RGB de rojo y verde
-    const r = Math.round(231 + (15 - 231) * porcentaje);  // de rojo intenso (#e74c3c) a verde (#0f0)
-    const g = Math.round(76 + (255 - 76) * porcentaje);   // verde
-    const b = Math.round(60 + (0 - 60) * porcentaje);     // azul
+    const r = Math.round(231 + (15 - 231) * porcentaje);  
+    const g = Math.round(76 + (255 - 76) * porcentaje);   
+    const b = Math.round(60 + (0 - 60) * porcentaje);     
     return `rgb(${r},${g},${b})`;
 }
 
@@ -121,7 +142,10 @@ async function actualizarDashboard(){
         const color = colorBarra(p.vida_actual, p.vida_max);
         cont.innerHTML += `
         <div class="personaje">
-            <h2>${p.nombre}</h2>
+            <div class="cabecera">
+                <div class="iniciativa">${p.iniciativa ?? '-'}</div>
+                <h2>${p.nombre}</h2>
+            </div>
             <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
             <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${color};"></div></div>
             <p>Heridas: ${p.heridas}</p>
@@ -131,7 +155,6 @@ async function actualizarDashboard(){
     });
 }
 
-// Actualizar cada 2 segundos
 setInterval(actualizarDashboard, 2000);
 </script>
 </body>

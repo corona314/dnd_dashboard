@@ -5,20 +5,7 @@ body {
     text-align: center;
 }
 
-.personajes {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
 
-.personaje {
-    border: 1px solid white;
-    margin: 10px;
-    padding: 10px;
-    width: 150px;
-    background-color: #2e2e2e;
-    border-radius: 8px;
-}
 
 .personaje img {
     width: 100px;
@@ -54,6 +41,18 @@ body {
     font-size: 0.8em;
     font-weight: bold;
     color: white;
+}
+
+.iniciativa {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000; /* contorno negro */
 }
 
 /* Colores según el tipo de estado */
