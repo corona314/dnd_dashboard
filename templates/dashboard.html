@@ -137,10 +137,10 @@
     <script>
     function colorBarra(vida_actual, vida_max) {
         const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));
-        const r = Math.round(231 + (15 - 231) * porcentaje);  
-        const g = Math.round(76 + (255 - 76) * porcentaje);   
-        const b = Math.round(60 + (0 - 60) * porcentaje);     
-        return `rgb(${r},${g},${b})`;
+        const r = Math.round(255 * (1 - porcentaje));
+        const g = Math.round(255 * porcentaje);
+        const b = 0;
+        return `rgb(${r},${g},${b})`;  
     }
 
     async function actualizarDashboard(){

@@ -1,8 +1,8 @@
 [
     {
         "nombre": "Vaelora",
-        "vida_actual": 12,
-        "vida_max": 20,
+        "vida_actual": 14,
+        "vida_max": 29,
         "heridas": 2,
         "shock": 0,
         "imagen": "vaelora.png",
@@ -11,7 +11,7 @@
     },
     {
         "nombre": "Ken",
-        "vida_actual": 8,
+        "vida_actual": 14,
         "vida_max": 20,
         "heridas": 2,
         "shock": 0,
