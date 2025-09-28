@@ -1,57 +1,60 @@
-[
-    {
-        "nombre": "Vaelora",
-        "vida_actual": 15,
-        "vida_max": 15,
-        "heridas": 0,
-        "shock": 0,
-        "imagen": "vaelora.png",
-        "estados": [],
-        "iniciativa": 15,
-        "turno": false
-    },
-    {
-        "nombre": "Ken",
-        "vida_actual": 8,
-        "vida_max": 16,
-        "heridas": 0,
-        "shock": 0,
-        "imagen": "ken.png",
-        "estados": [],
-        "iniciativa": 5,
-        "turno": false
-    },
-    {
-        "nombre": "Adelgo",
-        "vida_actual": 20,
-        "vida_max": 74,
-        "heridas": 0,
-        "shock": 0,
-        "imagen": "adelgo.jpeg",
-        "estados": [],
-        "iniciativa": 4,
-        "turno": false
-    },
-    {
-        "nombre": "Lillie",
-        "vida_actual": 7,
-        "vida_max": 20,
-        "heridas": 0,
-        "shock": 0,
-        "imagen": "lillie.png",
-        "estados": [],
-        "iniciativa": 21,
-        "turno": true
-    },
-    {
-        "nombre": "Jogur",
-        "vida_actual": 20,
-        "vida_max": 20,
-        "heridas": 0,
-        "shock": 0,
-        "imagen": "jormungandr.jpg",
-        "estados": [],
-        "iniciativa": 8,
-        "turno": false
-    }
-]
+{
+    "ronda": 2,
+    "personajes": [
+        {
+            "nombre": "Vaelora",
+            "vida_actual": 15,
+            "vida_max": 15,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "vaelora.png",
+            "estados": [],
+            "iniciativa": 15,
+            "turno": false
+        },
+        {
+            "nombre": "Ken",
+            "vida_actual": 8,
+            "vida_max": 16,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "ken.png",
+            "estados": [],
+            "iniciativa": 5,
+            "turno": false
+        },
+        {
+            "nombre": "Adelgo",
+            "vida_actual": 20,
+            "vida_max": 74,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "adelgo.jpeg",
+            "estados": [],
+            "iniciativa": 4,
+            "turno": true
+        },
+        {
+            "nombre": "Lillie",
+            "vida_actual": 7,
+            "vida_max": 20,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "lillie.png",
+            "estados": [],
+            "iniciativa": 21,
+            "turno": false
+        },
+        {
+            "nombre": "Jogur",
+            "vida_actual": 20,
+            "vida_max": 20,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "jormungandr.jpg",
+            "estados": [],
+            "iniciativa": 8,
+            "turno": false
+        }
+    ]
+}

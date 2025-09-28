@@ -4,24 +4,56 @@ import threading
 import tkinter as tk
 from tkinter import ttk
 
-# --- Flask ---
+# Flask
 app = Flask(__name__)
 
 def cargar_personajes():
     try:
         with open("personajes.json", "r") as f:
-            return json.load(f)
+            data = json.load(f)
+            return data.get("personajes", [])
     except FileNotFoundError:
         return []
 
+def cargar_ronda():
+    try:
+        with open("personajes.json", "r") as f:
+            data = json.load(f)
+            return data.get("ronda", 0)
+    except FileNotFoundError:
+        return 0
+
 def guardar_personajes(personajes):
+    try:
+        with open("personajes.json", "r") as f:
+            data = json.load(f)
+            ronda = data.get("ronda", 0)
+    except FileNotFoundError:
+        ronda = 0  # si no existe, empezamos con la ronda 0
+
     with open("personajes.json", "w") as f:
-        json.dump(personajes, f, indent=4)
+        json.dump({"ronda": ronda, "personajes": personajes}, f, indent=4)
+
+
+def guardar_ronda(ronda):
+    try:
+        with open("personajes.json", "r") as f:
+            data = json.load(f)
+            personajes_actuales = data.get("personajes", [])
+    except FileNotFoundError:
+        personajes_actuales = []  # si no existe, lista vacía
+
+    with open("personajes.json", "w") as f:
+        json.dump({"ronda": ronda, "personajes": personajes_actuales}, f, indent=4)
+
+guardar_ronda(0) # Inicializar ronda en 0
 
 @app.route("/dashboard")
 def dashboard():
     personajes = cargar_personajes()
-    return render_template("dashboard.html", personajes=personajes)
+    ronda = cargar_ronda()
+
+    return render_template("dashboard.html", personajes=personajes, ronda=ronda)
 
 @app.route("/actualizar", methods=["POST"])
 def actualizar():
@@ -37,10 +69,15 @@ def actualizar():
 
 @app.route("/dashboard-data")
 def dashboard_data():
+    global ronda_actual
     personajes = cargar_personajes()
+    ronda = cargar_ronda()
     # Ordenar por iniciativa
     personajes_ordenados = sorted(personajes, key=lambda p: p.get("iniciativa", 0), reverse=True)
-    return jsonify({"personajes": personajes_ordenados})
+    return jsonify({
+        "ronda": ronda,
+        "personajes": personajes_ordenados
+    })
 
 
 # --- Tkinter ---
@@ -309,13 +346,17 @@ def run_tkinter():
 
         # si volvemos al primero → nueva ronda
         if turno_actual == 0:
-            ronda_var.set(ronda_var.get() + 1)
+            ronda_actual = cargar_ronda()
+            ronda_actual += 1
+            ronda_var.set(ronda_actual)
             ronda_label.config(text=f"Ronda: {ronda_var.get()}")
+            guardar_ronda(ronda_actual)
         
         # avanzar turno
         turno_actual = (turno_actual + 1) % len(turno_indices)
 
         guardar_personajes(personajes)
+
 
 
 

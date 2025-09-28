@@ -143,6 +143,8 @@
     </head>
     <body>
     <h1>Personajes</h1>
+    <h2 id="ronda-titulo">Ronda: 0</h2> <!-- Nueva línea para la ronda -->
+
     <div class="personajes" id="personajes-dashboard"></div>
 
     <script>
@@ -157,6 +159,9 @@
     async function actualizarDashboard(){
         const res = await fetch('/dashboard-data');
         const data = await res.json();
+        
+        document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
+
         const cont = document.getElementById('personajes-dashboard');
         cont.innerHTML = '';
         data.personajes.forEach(p => {
