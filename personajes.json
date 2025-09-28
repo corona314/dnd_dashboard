@@ -9,7 +9,7 @@
             "shock": 0,
             "imagen": "vaelora.png",
             "estados": [],
-            "iniciativa": 15,
+            "iniciativa": 1,
             "turno": false
         },
         {
@@ -20,7 +20,7 @@
             "shock": 0,
             "imagen": "ken.png",
             "estados": [],
-            "iniciativa": 5,
+            "iniciativa": 1,
             "turno": false
         },
         {
@@ -31,7 +31,7 @@
             "shock": 0,
             "imagen": "adelgo.jpeg",
             "estados": [],
-            "iniciativa": 4,
+            "iniciativa": 1,
             "turno": false
         },
         {
@@ -42,8 +42,8 @@
             "shock": 0,
             "imagen": "lillie.png",
             "estados": [],
-            "iniciativa": 21,
-            "turno": true
+            "iniciativa": 1,
+            "turno": false
         },
         {
             "nombre": "Jogur",
@@ -53,7 +53,7 @@
             "shock": 0,
             "imagen": "jormungandr.jpg",
             "estados": [],
-            "iniciativa": 8,
+            "iniciativa": 1,
             "turno": false
         }
     ]
