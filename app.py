@@ -27,7 +27,7 @@ def guardar_personajes(personajes):
     try:
         with open("personajes.json", "r") as f:
             data = json.load(f)
-            ronda = data.get("ronda", 0)
+            ronda = data.get("ronda", 0) 
     except FileNotFoundError:
         ronda = 0  # si no existe, empezamos con la ronda 0
 

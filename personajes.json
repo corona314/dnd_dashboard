@@ -1,5 +1,5 @@
 {
-    "ronda": 2,
+    "ronda": 1,
     "personajes": [
         {
             "nombre": "Vaelora",
@@ -32,7 +32,7 @@
             "imagen": "adelgo.jpeg",
             "estados": [],
             "iniciativa": 4,
-            "turno": true
+            "turno": false
         },
         {
             "nombre": "Lillie",
@@ -43,7 +43,7 @@
             "imagen": "lillie.png",
             "estados": [],
             "iniciativa": 21,
-            "turno": false
+            "turno": true
         },
         {
             "nombre": "Jogur",
