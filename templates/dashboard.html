@@ -1,197 +1,197 @@
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-    <meta charset="UTF-8">
-    <title>Dashboard DnD</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #1e1e1e;
-        color: white;
-        text-align: center;
-    }
-    
-    .personajes {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 20px;
-        justify-content: center;
-    }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard DnD</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    text-align: center;
+}
 
-    .personaje {
-        border: 1px solid #ccc;
-        padding: 10px;
-        width: 200px;
-        text-align: center;
-        background-color: #2e2e2e;
-        border-radius: 8px;
-        color: white;
-        transition: transform 0.3s, box-shadow 0.3s;
+.personajes {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    justify-content: center;
+}
 
-    }
-    
-    .personaje:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    }
+.personaje {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
 
-    .personaje img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-    }
+}
 
-    .personaje.turno {
-        border: 2px solid yellow;
-        box-shadow: 0 0 15px yellow;
-        transform: scale(1.05);
-    }
+.personaje:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
 
-    .cabecera {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 5px;
-    }
+.personaje img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
 
-    .iniciativa {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: white;
-        text-shadow: 
-            -1px -1px 0 #000,  
-            1px -1px 0 #000,
-            -1px  1px 0 #000,
-            1px  1px 0 #000; 
-    }
+.personaje.turno {
+    border: 2px solid yellow;
+    box-shadow: 0 0 15px yellow;
+    transform: scale(1.05);
+}
 
-    .vida {
-        background: #555;
-        height: 20px;
-        width: 100%;
-        margin: 5px 0;
-        border-radius: 5px;
-        overflow: hidden;
-    }
+.cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
 
-    .barra {
-        height: 100%;
-        width: 0%;
-        border-radius: 5px;
-        transition: width 0.5s, background-color 0.5s;
-    }
+.iniciativa {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px  1px 0 #000,
+        1px  1px 0 #000; 
+}
 
-    .estados {
-        margin-top: 5px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        justify-content: center;
-    }
+.vida {
+    background: #555;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
 
-    .estado {
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.8em;
-        font-weight: bold;
-        color: white;
-    }
+.barra {
+    height: 100%;
+    width: 0%;
+    border-radius: 5px;
+    transition: width 0.5s, background-color 0.5s;
+}
 
-    .estado.Agarrado { background-color: #423404; }
-    .estado.Apresado { background-color: #b6e702; }
-    .estado.Asustado { background-color: #000275; }
-    .estado.Aturdido { background-color: #b10ff1; }
-    .estado.Cansancio { background-color: #95a5a6; }
-    .estado.Cegado { background-color: #7c7c7c; }
-    .estado.Derribado { background-color: #d35400; }
-    .estado.Ensordecido { background-color: #16a085; }
-    .estado.Envenenado { background-color: #00f314; }
-    .estado.Hechizado { background-color: #e092ff; }
-    .estado.Incapacitado { background-color: #e74c3c; }
-    .estado.Inconsciente { background-color: #2c3e50; }
-    .estado.Invisible { background-color: #7f8c8d; }
-    .estado.Paralizado { background-color: #53ebac; }
-    .estado.Petrificado { background-color: #5e2500; }
+.estados {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
 
-    /* Animación de parpadeo rojo */
-    @keyframes parpadeo-rojo {
+.estado {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+}
+
+.estado.Agarrado { background-color: #423404; }
+.estado.Apresado { background-color: #b6e702; }
+.estado.Asustado { background-color: #000275; }
+.estado.Aturdido { background-color: #b10ff1; }
+.estado.Cansancio { background-color: #95a5a6; }
+.estado.Cegado { background-color: #7c7c7c; }
+.estado.Derribado { background-color: #d35400; }
+.estado.Ensordecido { background-color: #16a085; }
+.estado.Envenenado { background-color: #00f314; }
+.estado.Hechizado { background-color: #e092ff; }
+.estado.Incapacitado { background-color: #e74c3c; }
+.estado.Inconsciente { background-color: #2c3e50; }
+.estado.Invisible { background-color: #7f8c8d; }
+.estado.Paralizado { background-color: #53ebac; }
+.estado.Petrificado { background-color: #5e2500; }
+
+/* Animación de parpadeo rojo */
+@keyframes parpadeo-rojo {
+0% { background-color: #2e2e2e; }
+50% { background-color: #ff0000ab; }
+100% { background-color: #2e2e2e; }
+}
+/* Animación de parpadeo naranja */
+@keyframes parpadeo-naranja {
     0% { background-color: #2e2e2e; }
-    50% { background-color: #ff0000ab; }
+    50% { background-color: #ff8000ab; }
     100% { background-color: #2e2e2e; }
 }
-    /* Animación de parpadeo naranja */
-    @keyframes parpadeo-naranja {
-        0% { background-color: #2e2e2e; }
-        50% { background-color: #ff8000ab; }
-        100% { background-color: #2e2e2e; }
-    }
 
-    .personaje.shock-critico {
-        animation: parpadeo-rojo 2s infinite;
-    }
-    .personaje.shock {
-        animation: parpadeo-naranja 2s infinite;
-    }
-    .personaje.shock-muerte {
-        background-color: #000000;
-        animation: none;        
-    }
+.personaje.shock-critico {
+    animation: parpadeo-rojo 2s infinite;
+}
+.personaje.shock {
+    animation: parpadeo-naranja 2s infinite;
+}
+.personaje.shock-muerte {
+    background-color: #000000;
+    animation: none;        
+}
 
-    </style>
-    </head>
-    <body>
-    <h1 id="ronda-titulo">Ronda: 0</h1>
-    <div class="personajes" id="personajes-dashboard"></div>
+</style>
+</head>
+<body>
+<h1 id="ronda-titulo">Ronda: 0</h1>
+<div class="personajes" id="personajes-dashboard"></div>
 
-    <script>
-    function colorBarra(vida_actual, vida_max) {
-        const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));
-        const r = Math.round(255 * (1 - porcentaje));
-        const g = Math.round(255 * porcentaje);
-        const b = 0;
-        return `rgb(${r},${g},${b})`;  
-    }
+<script>
+function colorBarra(vida_actual, vida_max) {
+    const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));
+    const r = Math.round(255 * (1 - porcentaje));
+    const g = Math.round(255 * porcentaje);
+    const b = 0;
+    return `rgb(${r},${g},${b})`;  
+}
 
-    async function actualizarDashboard(){
-        const res = await fetch('/dashboard-data');
-        const data = await res.json();
-        
-        document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
+async function actualizarDashboard(){
+    const res = await fetch('/dashboard-data');
+    const data = await res.json();
+    
+    document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
 
-        const cont = document.getElementById('personajes-dashboard');
-        cont.innerHTML = '';
-        data.personajes.forEach(p => {
-            const estadosHTML = p.estados && p.estados.length
-                ? p.estados.map(e => `<span class="estado ${e}">${e}</span>`).join(' ')
-                : `<span class="estado">Ninguno</span>`;
-            const ancho = (p.vida_actual / p.vida_max) * 100;
-            const color = colorBarra(p.vida_actual, p.vida_max);
-            const claseShock = p.shock == 1 ? "shock" 
-                   : p.shock == 2 ? "shock-critico" 
-                   : p.shock == 3 ? "shock-muerte" 
-                   : "";
-            const clases = [claseShock];
-            if (p.turno) clases.push("turno");
+    const cont = document.getElementById('personajes-dashboard');
+    cont.innerHTML = '';
+    data.personajes.forEach(p => {
+        const estadosHTML = p.estados && p.estados.length
+            ? p.estados.map(e => `<span class="estado ${e}">${e}</span>`).join(' ')
+            : `<span class="estado">Ninguno</span>`;
+        const ancho = (p.vida_actual / p.vida_max) * 100;
+        const color = colorBarra(p.vida_actual, p.vida_max);
+        const claseShock = p.shock == 1 ? "shock" 
+                : p.shock == 2 ? "shock-critico" 
+                : p.shock == 3 ? "shock-muerte" 
+                : "";
+        const clases = [claseShock];
+        if (p.turno) clases.push("turno");
 
-            cont.innerHTML += `
-            <div class="personaje ${clases.join(" ")}">
-                <div class="cabecera">
-                    <div class="iniciativa">${p.iniciativa ?? '-'}</div>
-                    <h2>${p.nombre}</h2>
-                </div>
-                <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
-                <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${color};"></div></div>
-                <p>Heridas: ${p.heridas}</p>
-                <p>Shock: ${p.shock}</p>
-                <div class="estados">${estadosHTML}</div>
-            </div>`;
-        });
-    }
+        cont.innerHTML += `
+        <div class="personaje ${clases.join(" ")}">
+            <div class="cabecera">
+                <div class="iniciativa">${p.iniciativa ?? '-'}</div>
+                <h2>${p.nombre}</h2>
+            </div>
+            <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
+            <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${color};"></div></div>
+            <p>Heridas: ${p.heridas}</p>
+            <p>Shock: ${p.shock}</p>
+            <div class="estados">${estadosHTML}</div>
+        </div>`;
+    });
+}
 
-    // Actualizar cada 2 segundos
-    setInterval(actualizarDashboard, 2000);
-    </script>
-    </body>
-    </html>
+// Actualizar cada 2 segundos
+setInterval(actualizarDashboard, 2000);
+</script>
+</body>
+</html>

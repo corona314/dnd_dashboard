@@ -29,7 +29,7 @@ def guardar_personajes(personajes):
             data = json.load(f)
             ronda = data.get("ronda", 0) 
     except FileNotFoundError:
-        ronda = 0  # si no existe, empezamos con la ronda 0
+        ronda = 0
 
     with open("personajes.json", "w") as f:
         json.dump({"ronda": ronda, "personajes": personajes}, f, indent=4)
@@ -41,7 +41,7 @@ def guardar_ronda(ronda):
             data = json.load(f)
             personajes_actuales = data.get("personajes", [])
     except FileNotFoundError:
-        personajes_actuales = []  # si no existe, lista vacía
+        personajes_actuales = []
 
     with open("personajes.json", "w") as f:
         json.dump({"ronda": ronda, "personajes": personajes_actuales}, f, indent=4)
@@ -80,7 +80,7 @@ def dashboard_data():
     })
 
 
-# --- Tkinter ---
+# Tkinter
 vida_labels = []
 vida_vars = []
 heridas_vars = []
@@ -367,7 +367,7 @@ def run_tkinter():
     root.mainloop()
 
 
-# --- Ejecutar Flask en un hilo ---
+# Ejecutar Flask en un hilo
 flask_thread = threading.Thread(target=lambda: app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False))
 flask_thread.daemon = True
 flask_thread.start()
