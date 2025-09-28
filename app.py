@@ -93,7 +93,12 @@ def run_tkinter():
     # Variables para seleccionar personaje y estado
     estado_seleccionado = tk.StringVar()
     personaje_seleccionado = tk.StringVar()
-
+    
+    # Contador de rondas
+    ronda_var = tk.IntVar(value=0)
+    ronda_label = ttk.Label(root, text=f"Ronda: {ronda_var.get()}", font=("Arial", 14, "bold"))
+    ronda_label.grid(row=100, column=0, columnspan=2, pady=10, sticky="w")
+    
     # Lista de estados posibles
     estados_disponibles = [
         "Agarrado","Apresado","Asustado","Aturdido","Cansancio",
@@ -102,14 +107,14 @@ def run_tkinter():
     ]
 
     # Combobox de selección de personaje
-    ttk.Label(root, text="Personaje:").grid(row=100, column=0, sticky="w")
+    ttk.Label(root, text="Personaje:").grid(row=101, column=0, sticky="w")
     personaje_menu = ttk.Combobox(root, values=[p["nombre"] for p in personajes], textvariable=personaje_seleccionado, state="readonly")
-    personaje_menu.grid(row=100, column=1)
+    personaje_menu.grid(row=101, column=0, sticky="w", padx=70)
 
     # Combobox de selección de estado
-    ttk.Label(root, text="Estado:").grid(row=101, column=0, sticky="w")
+    ttk.Label(root, text="Estado:").grid(row=102, column=0, sticky="w")
     estado_menu = ttk.Combobox(root, values=estados_disponibles, textvariable=estado_seleccionado, state="readonly")
-    estado_menu.grid(row=101, column=1)
+    estado_menu.grid(row=102, column=0, sticky="w", padx=70)
 
     # Botón para agregar estado
     def agregar_estado():
@@ -154,7 +159,7 @@ def run_tkinter():
                 guardar_personajes(personajes)
                 actualizar_valores(personajes.index(p))
                 break
-    ttk.Button(root, text="Agregar estado", command=agregar_estado).grid(row=102, column=0, columnspan=2)
+    ttk.Button(root, text="Agregar estado", command=agregar_estado).grid(row=101, column=0, columnspan=2, padx=100)
 
     # Botón para quitar estado
     def quitar_estado():
@@ -179,7 +184,7 @@ def run_tkinter():
                 guardar_personajes(personajes)
                 actualizar_valores(personajes.index(p))
                 break
-    ttk.Button(root, text="Quitar estado", command=quitar_estado).grid(row=103, column=0, columnspan=2)
+    ttk.Button(root, text="Quitar estado", command=quitar_estado).grid(row=102, column=0, columnspan=2, padx=100)
 
 
     # Variables para turno
@@ -301,12 +306,21 @@ def run_tkinter():
         idx = turno_indices[turno_actual]
         personajes[idx]["turno"] = True
         actualizar_turnos()
+
+        # si volvemos al primero → nueva ronda
+        if turno_actual == 0:
+            ronda_var.set(ronda_var.get() + 1)
+            ronda_label.config(text=f"Ronda: {ronda_var.get()}")
+        
+        # avanzar turno
         turno_actual = (turno_actual + 1) % len(turno_indices)
+
         guardar_personajes(personajes)
 
 
+
     # Botón pasar turno
-    ttk.Button(root, text="Pasar turno", command=pasar_turno).grid(row=104, column=0, columnspan=2, pady=10)
+    ttk.Button(root, text="Pasar turno", command=pasar_turno).grid(row=102, column=1, columnspan=2, pady=5)
 
     pasar_turno()  # Iniciar el primer turno
     root.mainloop()
