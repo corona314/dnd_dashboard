@@ -43,6 +43,51 @@ input, select, button {
     margin: 2px;
     font-size: 0.9em;
 }
+label {
+    display: inline-block;
+    margin: 5px 0;
+    font-weight: bold;
+    color: #d4c6a8;
+    text-shadow: 1px 1px 2px #000;
+}
+.stat-label {
+    display: inline-block;
+    margin: 4px 0;
+    font-weight: bold;
+    color: #ddd;
+}
+select {
+    background-color: #2e2e2e;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 0.9em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #9b6b34;
+    box-shadow: 0 0 6px #9b6b34;
+}
+input[type="number"], 
+input[type="text"] {
+    background-color: #2e2e2e;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 4px 6px;
+    width: 60px;
+    text-align: center;
+    font-size: 0.9em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+input:focus {
+    outline: none;
+    border-color: #356de5;
+    box-shadow: 0 0 6px #356de5;
+}
 .button {
     background-color: #9b6b34; 
     border: none;
@@ -54,16 +99,28 @@ input, select, button {
     font-size: 0.9em;
     transition: background-color 0.3s, transform 0.2s;
 }
-
 .button:hover {
     background-color: #643e13;
     transform: scale(1.05);
 }
-
 .button:active {
     background-color: #ac8b66;
     transform: scale(0.95);
 }
+.button-red {
+    background-color: #864a49;
+}
+.button-red:hover {
+    background-color: #522c2b;
+}
+
+.button-blue {
+    background-color: #5d72a0;
+}
+.button-blue:hover {
+    background-color: #35425e;
+}
+
 </style>
 </head>
 <body>
@@ -141,23 +198,32 @@ function renderPersonajes() {
         div.className = 'personaje';
         div.innerHTML = `
             <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
-            <div class="barra"><div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div></div>
-            <span id="vida-label-${i}">${p.vida_actual}/${p.vida_max}</span><br>
-            Daño/Cura: <input type="number" id="vida-${i}" value="0" style="width:50px;">
+            <div class="barra">
+            <div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div>
+            </div>
+            <span id="vida-label-${i}" class="stat-label">${p.vida_actual}/${p.vida_max}</span><br>
+            <button class="button button-red" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
+            <button class="button button-blue" onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
+            <label class="label">Daño/Cura:</label>
+            <input type="number" id="vida-${i}" value="0" class="input">
             <button class="button" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
-            V.Max: <input type="number" id="vidaMax-${i}" value="${p.vida_max}" style="width:50px;">
+            <label class="label">V.Max:</label>
+            <input type="number" id="vidaMax-${i}" value="${p.vida_max}" class="input">
             <button class="button" onclick="aplicarVidaMax(${i})">Aplicar</button><br>
-            <button class="button" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
-            <button onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
-            Heridas: <span id="heridas-${i}">${p.heridas}</span>
-            <button class="button" onclick="modificar(${i}, 'heridas', 1)">+</button>
-            <button class="button" onclick="modificar(${i}, 'heridas', -1)">-</button><br>
-            Shock: <span id="shock-${i}">${p.shock}</span>
-            <button class="button" onclick="modificar(${i}, 'shock', 1)">+</button>
-            <button class="button" onclick="modificar(${i}, 'shock', -1)">-</button><br>
-            Inic.: <input type="number" id="inic-${i}" value="${p.iniciativa || 0}" style="width:50px;">
+            <label class="label">Heridas:</label>
+            <span id="heridas-${i}">${p.heridas}</span>
+            <button class="button button-red" onclick="modificar(${i}, 'heridas', 1)">+</button>
+            <button class="button button-blue" onclick="modificar(${i}, 'heridas', -1)">-</button><br>
+            <label class="label">Shock:</label>
+            <span id="shock-${i}">${p.shock}</span>
+            <button class="button button-red" onclick="modificar(${i}, 'shock', 1)">+</button>
+            <button class="button button-blue" onclick="modificar(${i}, 'shock', -1)">-</button><br>
+            <label class="label">Inic.:</label>
+            <input type="number" id="inic-${i}" value="${p.iniciativa || 0}" class="input">
             <button class="button" onclick="aplicarIniciativa(${i})">Aplicar</button><br>
-            Estados: <span id="estados-${i}">${(p.estados || []).join(', ')}</span>
+            <label class="label">Estados:</label>
+            <span id="estados-${i}">${(p.estados || []).join(', ')}</span>
+
         `;
         fila.appendChild(div);
     });
