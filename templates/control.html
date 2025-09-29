@@ -170,8 +170,20 @@ let initialized = false;
 
 // Progresión de enfermedades
 const enfermedadProgresion = {
-    "Fiebre de los Pantanos": ["Leve", "Moderada", "Grave", "Crítica"]
+    "Fiebre de los Pantanos": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Pulmonía Trémula": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Agua Negra": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Infección de Herida": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Peste Ligera (Gripe del Aarakocra)": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Migraña": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Parásitos Intestinales": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Somnolencia Letárgica": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Peste de Mantícora": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Toxina Neblinosa": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Verruga Astral": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Sombra Consumidora": ["Leve", "Moderada", "Grave", "Crítica"]
 };
+
 
 function colorBarra(vida_actual, vida_max) {
     const pct = Math.max(0, Math.min(1, vida_actual/vida_max));

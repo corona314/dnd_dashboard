@@ -99,7 +99,6 @@ def actualizar():
             if p["nombre"] == data["nombre"]:
                 if "estados" not in p:
                     p["estados"] = []
-
                 if accion == "agregar":
                     if estado == "Cansancio":
                         niveles = [s for s in p["estados"] if s.startswith("Cansancio")]
@@ -118,7 +117,12 @@ def actualizar():
                                 p["estados"].append("Cansancio (6)")
                         else:
                             p["estados"].append("Cansancio")
-                    else:
+                    elif "(" in estado and ")" in estado:  # cualquier enfermedad con niveles
+                        base_estado = estado.split(" (")[0]
+                        # Eliminar el estado previo de esa enfermedad
+                        p["estados"] = [s for s in p["estados"] if not s.startswith(base_estado)]
+                        p["estados"].append(estado)
+                    else:  # estados normales
                         if estado not in p["estados"]:
                             p["estados"].append(estado)
                         if estado in ["Aturdido", "Inconsciente", "Paralizado", "Petrificado"] and "Incapacitado" not in p["estados"]:
