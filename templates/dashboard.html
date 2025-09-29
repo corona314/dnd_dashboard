@@ -197,13 +197,6 @@ body {
 <div class="personajes" id="personajes-dashboard"></div>
 
 <script>
-function colorBarra(vida_actual, vida_max) {
-    const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));
-    const r = Math.round(255 * (1 - porcentaje));
-    const g = Math.round(255 * porcentaje);
-    const b = 0;
-    return `rgb(${r},${g},${b})`;  
-}
 const descripcionesEstados = {
     "Agarrado": "Velocidad = 0. Este estado termina si quien agarra queda incapacitado o si algún efecto aleja a la criatura de quien (o lo que) la tiene agarrada",
     "Apresado": "Velocidad = 0. Ataques contra la criatura: ventaja. Ataques hechos por la criatura: desventaja. Desventaja en las salvaciones de Destreza",
@@ -221,53 +214,104 @@ const descripcionesEstados = {
     "Paralizado": "Fallo automático de salvaciones de Fuerza y Destreza. Ataques contra la criatura: ventaja, crítico a 5 pies o menos",
     "Petrificado": "Fallo automático de salvaciones de Fuerza y Destreza. Ataques contra la criatura: ventaja. Resistencia: todo. Inmunidad: veneno/enfermedad"
 };
-function actualizarDashboard(){
-    fetch('/dashboard-data')
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
-        const cont = document.getElementById('personajes-dashboard');
-        cont.innerHTML = '';
 
-        data.personajes.forEach(p => {
-            const ancho = (p.vida_actual / p.vida_max) * 100;
-            const color = colorBarra(p.vida_actual, p.vida_max);
-            const claseShock = p.shock == 1 ? "shock" 
-                : p.shock == 2 ? "shock-critico" 
-                : p.shock == 3 ? "shock-muerte" 
-                : "";
-            const clases = [claseShock];
-            if (p.turno) clases.push("turno");
+// Calcula color de la barra de vida
+function colorBarra(vida_actual, vida_max) {
+    const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));
+    const r = Math.round(255 * (1 - porcentaje));
+    const g = Math.round(255 * porcentaje);
+    return `rgb(${r},${g},0)`;  
+}
 
-            // Generar HTML de estados con title
-            const estadosHTML = p.estados && p.estados.length
-                ? p.estados.map(e => {
-                    const desc = descripcionesEstados[e] || "Sin descripción";
-                    return `
-                    <span class="estado ${e}">
-                        ${e}
-                        <span class="tooltip">${desc}</span>
-                    </span>`;
-                }).join(' ')
+// Estado previo de personajes para actualizar incrementalmente
+const personajesPrev = {};
+
+function crearPersonajeHTML(p){
+    const ancho = (p.vida_actual / p.vida_max) * 100;
+    const claseShock = p.shock == 1 ? "shock" : p.shock == 2 ? "shock-critico" : p.shock == 3 ? "shock-muerte" : "";
+    const clases = [claseShock];
+    if(p.turno) clases.push("turno");
+
+    const estadosHTML = p.estados && p.estados.length
+        ? p.estados.map(e => `<span class="estado ${e}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`).join(' ')
+        : `<span class="estado">Ninguno</span>`;
+
+    return `
+    <div class="personaje ${clases.join(" ")}" id="personaje-${p.nombre}">
+        <div class="cabecera">
+            <div class="iniciativa">${p.iniciativa ?? '-'}</div>
+            <h2>${p.nombre}</h2>
+        </div>
+        <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
+        <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${colorBarra(p.vida_actual,p.vida_max)};"></div></div>
+        <p>Heridas: <span class="heridas">${p.heridas}</span></p>
+        <p>Shock: <span class="shock">${p.shock}</span></p>
+        <div class="estados">${estadosHTML}</div>
+    </div>`;
+}
+
+// Función de actualización incremental
+async function actualizarDashboard(){
+    const res = await fetch('/dashboard-data');
+    const data = await res.json();
+
+    document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
+
+    data.personajes.forEach(p => {
+        let div = document.getElementById(`personaje-${p.nombre}`);
+
+        if(!div){
+            // Crear personaje nuevo
+            document.getElementById('personajes-dashboard').insertAdjacentHTML('beforeend', crearPersonajeHTML(p));
+            personajesPrev[p.nombre] = {...p};
+            return;
+        }
+
+        const prev = personajesPrev[p.nombre] || {};
+
+        // Actualizar vida
+        if(prev.vida_actual !== p.vida_actual || prev.vida_max !== p.vida_max){
+            const barra = div.querySelector('.barra');
+            barra.style.width = `${(p.vida_actual/p.vida_max)*100}%`;
+            barra.style.backgroundColor = colorBarra(p.vida_actual,p.vida_max);
+        }
+
+        // Actualizar shock y turno
+        if(prev.shock !== p.shock || prev.turno !== p.turno){
+            div.classList.remove('shock','shock-critico','shock-muerte','turno');
+            if(p.shock == 1) div.classList.add('shock');
+            else if(p.shock == 2) div.classList.add('shock-critico');
+            else if(p.shock == 3) div.classList.add('shock-muerte');
+            if(p.turno) div.classList.add('turno');
+        }
+
+        // Heridas y shock numérico
+        if(prev.heridas !== p.heridas){
+            div.querySelector('.heridas').textContent = p.heridas;
+        }
+        if(prev.shock !== p.shock){
+            div.querySelector('.shock').textContent = p.shock;
+        }
+
+        // Estados: actualizar solo si cambian
+        const estadosDiv = div.querySelector('.estados');
+        const prevEstados = prev.estados || [];
+        const estadosIguales = JSON.stringify(prevEstados) === JSON.stringify(p.estados);
+        if(!estadosIguales){
+            estadosDiv.innerHTML = p.estados && p.estados.length
+                ? p.estados.map(e => `<span class="estado ${e}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`).join(' ')
                 : `<span class="estado">Ninguno</span>`;
+        }
 
-            cont.innerHTML += `
-            <div class="personaje ${clases.join(" ")}">
-                <div class="cabecera">
-                    <div class="iniciativa">${p.iniciativa ?? '-'}</div>
-                    <h2>${p.nombre}</h2>
-                </div>
-                <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
-                <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${color};"></div></div>
-                <p>Heridas: ${p.heridas}</p>
-                <p>Shock: ${p.shock}</p>
-                <div class="estados">${estadosHTML}</div>
-            </div>`;
-        });
+        // Guardar estado actualizado
+        personajesPrev[p.nombre] = {...p};
     });
 }
 
-// Actualizar cada 2 segundos
+// Llamada inicial
+actualizarDashboard();
+
+// Actualizar cada 2 segundos sin destruir tooltips
 setInterval(actualizarDashboard, 2000);
 </script>
 </body>

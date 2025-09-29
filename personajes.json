@@ -1,9 +1,9 @@
 {
-    "ronda": 1,
+    "ronda": 3,
     "personajes": [
         {
             "nombre": "Vaelora",
-            "vida_actual": 11,
+            "vida_actual": 10,
             "vida_max": 17,
             "heridas": 0,
             "shock": 0,
@@ -12,11 +12,11 @@
                 "Envenenado"
             ],
             "iniciativa": 15,
-            "turno": false
+            "turno": true
         },
         {
             "nombre": "Ken",
-            "vida_actual": 6,
+            "vida_actual": 9,
             "vida_max": 16,
             "heridas": 0,
             "shock": 0,
@@ -27,14 +27,14 @@
         },
         {
             "nombre": "Adelgo",
-            "vida_actual": 52,
+            "vida_actual": 38,
             "vida_max": 56,
             "heridas": 0,
             "shock": 0,
             "imagen": "adelgo.jpeg",
             "estados": [],
             "iniciativa": 17,
-            "turno": true
+            "turno": false
         },
         {
             "nombre": "Lillie",
