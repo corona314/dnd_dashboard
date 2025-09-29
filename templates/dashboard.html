@@ -166,6 +166,10 @@ body {
 .estado.Paralizado { background-color: #53ebac; }
 .estado.Petrificado { background-color: #5e2500; }
 
+.estado\.Leve { background-color: #90ee90; }     
+.estado\.Moderada { background-color: #ffd700; }   
+.estado\.Grave { background-color: #ff8c00; }     
+.estado\.Crítica { background-color: #ff4500; }
 /* Animación de parpadeo rojo */
 @keyframes parpadeo-rojo {
 0% { background-color: #2e2e2e; }
@@ -215,6 +219,12 @@ const descripcionesEstados = {
     "Petrificado": "Fallo automático de salvaciones de Fuerza y Destreza. Ataques contra la criatura: ventaja. Resistencia: todo. Inmunidad: veneno/enfermedad"
 };
 
+const descripcionesEnfermedades = {
+    "Fiebre de los Pantanos (Leve)": "Desventaja en Fuerza y Constitución",
+    "Fiebre de los Pantanos (Moderada)": "Perder 1d4 PG/descanso",
+    "Fiebre de los Pantanos (Grave)": "Perder 1d6 PGM y 1d6 PG/descanso",
+    "Fiebre de los Pantanos (Crítica)": "Cada DL: Con DC15 o Cansancio"
+};
 // Calcula color de la barra de vida
 function colorBarra(vida_actual, vida_max) {
     const porcentaje = Math.max(0, Math.min(1, vida_actual / vida_max));

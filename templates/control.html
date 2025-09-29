@@ -127,22 +127,37 @@ input:focus {
 <h1>Control DnD</h1>
 <div id="ronda-titulo">Ronda: 0</div>
 
+<!-- Controles para Estados normales -->
 <div>
-    <label>Personaje:</label>
-    <select id="personaje-seleccionado"></select>
+  <label>Personaje (Estado):</label>
+  <select id="personaje-estado"></select>
 </div>
 <div>
-    <label>Estado:</label>
-    <select id="estado-seleccionado">
-        <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
-        <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
-        <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
-        <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
-    </select>
+  <label>Estado:</label>
+  <select id="estado-seleccionado">
+    <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
+    <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
+    <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
+    <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
+  </select>
 </div>
 <div>
-    <button class="button" onclick="agregarEstado()">Agregar estado</button>
-    <button class="button" onclick="quitarEstado()">Quitar estado</button>
+  <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
+  <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
+</div>
+
+<!-- Controles para Enfermedades -->
+<div>
+  <label>Personaje (Enfermedad):</label>
+  <select id="personaje-enfermedad"></select>
+</div>
+<div>
+  <label>Enfermedad:</label>
+  <select id="enfermedad-seleccionada"></select>
+</div>
+<div>
+  <button class="button" onclick="agregarEnfermedad()">Agregar enfermedad</button>
+  <button class="button" onclick="quitarEnfermedad()">Quitar enfermedad</button>
 </div>
 <div id="personajes-control"></div>
 <button class="button" onclick="pasarTurno()">Pasar turno</button>
@@ -152,6 +167,11 @@ let personajes = [];
 let ronda = 0;
 let turnoActual = 0;
 let initialized = false;
+
+// Progresión de enfermedades
+const enfermedadProgresion = {
+    "Fiebre de los Pantanos": ["Leve", "Moderada", "Grave", "Crítica"]
+};
 
 function colorBarra(vida_actual, vida_max) {
     const pct = Math.max(0, Math.min(1, vida_actual/vida_max));
@@ -178,17 +198,16 @@ async function fetchData() {
         ronda = data.ronda ?? ronda;
         document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
     }
-
-    const sel = document.getElementById('personaje-seleccionado');
-    sel.innerHTML = personajes.map(p => `<option>${p.nombre}</option>`).join('');
     renderPersonajes();
+    renderPersonajeSelects();
+    renderEnfermedadesSelect();
 }
+
+    
 
 function renderPersonajes() {
     const cont = document.getElementById('personajes-control');
     cont.innerHTML = '';
-
-    // contenedor flex
     const fila = document.createElement('div');
     fila.className = 'personajes';
 
@@ -230,15 +249,12 @@ function renderPersonajes() {
 
             <label class="label">Estados:</label>
             <span id="estados-${i}" class="stat-label">${(p.estados || []).join(', ')}</span>
-
-
         `;
         fila.appendChild(div);
     });
 
     cont.appendChild(fila);
 }
-
 
 async function modificar(i, tipo, cantidad = 0) {
     const p = personajes[i];
@@ -299,8 +315,35 @@ async function aplicarIniciativa(i) {
     renderPersonajes();
 }
 
-async function agregarEstado() {
-    const nombre = document.getElementById("personaje-seleccionado").value;
+function siguienteNivel(nombreEnf, nivelActual) {
+    const niveles = enfermedadProgresion[nombreEnf];
+    const idx = niveles.indexOf(nivelActual);
+    if (idx === -1 || idx === niveles.length - 1) return niveles[0];
+    return niveles[idx + 1];
+}
+
+function renderPersonajeSelects() {
+    const selEstado = document.getElementById("personaje-estado");
+    const selEnf = document.getElementById("personaje-enfermedad");
+    selEstado.innerHTML = personajes.map(p => `<option>${p.nombre}</option>`).join('');
+    selEnf.innerHTML = personajes.map(p => `<option>${p.nombre}</option>`).join('');
+}
+
+function renderEnfermedadesSelect() {
+    const sel = document.getElementById("enfermedad-seleccionada");
+    sel.innerHTML = "";
+    const nombrePersonaje = document.getElementById("personaje-enfermedad").value;
+    const p = personajes.find(p => p.nombre === nombrePersonaje);
+
+    for (const nombreEnf in enfermedadProgresion) {
+        let estadoActual = p?.estados?.find(e => e.startsWith(nombreEnf));
+        let nivelMostrar = estadoActual ? siguienteNivel(nombreEnf, estadoActual.match(/\((.+)\)/)[1]) : enfermedadProgresion[nombreEnf][0];
+        sel.innerHTML += `<option value="${nombreEnf}">${nombreEnf} (${nivelMostrar})</option>`;
+    }
+}
+
+async function agregarEstadoNormal() {
+    const nombre = document.getElementById("personaje-estado").value;
     const estado = document.getElementById("estado-seleccionado").value;
     if (!nombre || !estado) return;
 
@@ -309,11 +352,12 @@ async function agregarEstado() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, estado_accion: "agregar", estado })
     });
+
     await fetchData();
 }
 
-async function quitarEstado() {
-    const nombre = document.getElementById("personaje-seleccionado").value;
+async function quitarEstadoNormal() {
+    const nombre = document.getElementById("personaje-estado").value;
     const estado = document.getElementById("estado-seleccionado").value;
     if (!nombre || !estado) return;
 
@@ -322,9 +366,65 @@ async function quitarEstado() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, estado_accion: "quitar", estado })
     });
+
     await fetchData();
 }
 
+async function agregarEnfermedad() {
+    const nombre = document.getElementById("personaje-enfermedad").value;
+    const enfNombre = document.getElementById("enfermedad-seleccionada").value;
+    if (!nombre || !enfNombre) return;
+
+    const p = personajes.find(p => p.nombre === nombre);
+    if (!p.estados) p.estados = [];
+
+    // Buscar si ya tiene esta enfermedad
+    let idx = p.estados.findIndex(e => e.startsWith(enfNombre));
+    let estadoActual = idx !== -1 ? p.estados[idx] : null;
+    let nivelActual = estadoActual ? estadoActual.match(/\((.+)\)/)[1] : null;
+    let nivelSiguiente = nivelActual ? siguienteNivel(enfNombre, nivelActual) : enfermedadProgresion[enfNombre][0];
+    const estadoFinal = `${enfNombre} (${nivelSiguiente})`;
+
+    if (idx !== -1) {
+        // Reemplazar el nivel existente
+        p.estados[idx] = estadoFinal;
+    } else {
+        // Agregar nuevo estado
+        p.estados.push(estadoFinal);
+    }
+
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, estado_accion: "agregar", estado: estadoFinal })
+    });
+
+    await fetchData();
+    renderEnfermedadesSelect();
+}
+
+
+async function quitarEnfermedad() {
+    const nombre = document.getElementById("personaje-enfermedad").value;
+    const enfNombre = document.getElementById("enfermedad-seleccionada").value;
+    if (!nombre || !enfNombre) return;
+
+    const p = personajes.find(p => p.nombre === nombre);
+    let estadoActual = p.estados?.find(e => e.startsWith(enfNombre));
+    if (!estadoActual) return;
+
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, estado_accion: "quitar", estado: estadoActual })
+    });
+
+    await fetchData();
+    renderEnfermedadesSelect();
+}
+
+
+// --- Turnos ---
 async function pasarTurno() {
     if (personajes.length === 0) return;
     const turnoIndices = personajes.map((_, i) => i)
@@ -349,7 +449,10 @@ async function pasarTurno() {
     document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
 }
 
+document.getElementById("personaje-enfermedad").addEventListener("change", renderEnfermedadesSelect);
+
 fetchData();
 </script>
+
 </body>
 </html>
