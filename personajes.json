@@ -1,5 +1,5 @@
 {
-    "ronda": 3,
+    "ronda": 0,
     "personajes": [
         {
             "nombre": "Vaelora",
@@ -27,7 +27,7 @@
         },
         {
             "nombre": "Adelgo",
-            "vida_actual": 38,
+            "vida_actual": 37,
             "vida_max": 56,
             "heridas": 0,
             "shock": 0,
