@@ -3,9 +3,9 @@
     "personajes": [
         {
             "nombre": "Vaelora",
-            "vida_actual": 12,
+            "vida_actual": 11,
             "vida_max": 17,
-            "heridas": 3,
+            "heridas": 0,
             "shock": 0,
             "imagen": "vaelora.png",
             "estados": [
@@ -16,9 +16,9 @@
         },
         {
             "nombre": "Ken",
-            "vida_actual": 9,
+            "vida_actual": 6,
             "vida_max": 16,
-            "heridas": 5,
+            "heridas": 0,
             "shock": 0,
             "imagen": "ken.png",
             "estados": [],
@@ -27,31 +27,33 @@
         },
         {
             "nombre": "Adelgo",
-            "vida_actual": 56,
+            "vida_actual": 52,
             "vida_max": 56,
-            "heridas": 7,
+            "heridas": 0,
             "shock": 0,
             "imagen": "adelgo.jpeg",
             "estados": [
-                "Paralizado"
+                "Agarrado"
             ],
             "iniciativa": 17,
             "turno": true
         },
         {
             "nombre": "Lillie",
-            "vida_actual": 7,
+            "vida_actual": 3,
             "vida_max": 20,
             "heridas": 0,
             "shock": 0,
             "imagen": "lillie.png",
-            "estados": [],
+            "estados": [
+                "Envenenado"
+            ],
             "iniciativa": 1,
             "turno": false
         },
         {
             "nombre": "Jogur",
-            "vida_actual": 20,
+            "vida_actual": 1,
             "vida_max": 20,
             "heridas": 0,
             "shock": 0,

@@ -5,17 +5,26 @@
 <title>Control DnD</title>
 <style>
 body {
-    background-color: #2e2e2e;
-    color: white;
     font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    text-align: center;
+}
+.personajes {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    justify-content: center;
 }
 .personaje {
-    border: 1px solid #555;
+    border: 1px solid #ccc;
     padding: 10px;
-    margin: 10px;
-    width: 220px;
-    display: inline-block;
-    vertical-align: top;
+    width: 200px;
+    text-align: center;
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 .barra {
     background-color: #555;
@@ -34,8 +43,26 @@ input, select, button {
     margin: 2px;
     font-size: 0.9em;
 }
-button {
+.button {
+    background-color: #9b6b34; 
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+    background-color: #643e13;
+    transform: scale(1.05);
+}
+
+.button:active {
+    background-color: #ac8b66;
+    transform: scale(0.95);
 }
 </style>
 </head>
@@ -57,11 +84,11 @@ button {
     </select>
 </div>
 <div>
-    <button onclick="agregarEstado()">Agregar estado</button>
-    <button onclick="quitarEstado()">Quitar estado</button>
+    <button class="button" onclick="agregarEstado()">Agregar estado</button>
+    <button class="button" onclick="quitarEstado()">Quitar estado</button>
 </div>
 <div id="personajes-control"></div>
-<button onclick="pasarTurno()">Pasar turno</button>
+<button class="button" onclick="pasarTurno()">Pasar turno</button>
 
 <script>
 let personajes = [];
@@ -103,6 +130,11 @@ async function fetchData() {
 function renderPersonajes() {
     const cont = document.getElementById('personajes-control');
     cont.innerHTML = '';
+
+    // contenedor flex
+    const fila = document.createElement('div');
+    fila.className = 'personajes';
+
     personajes.forEach((p, i) => {
         const barraAncho = (p.vida_max > 0) ? (p.vida_actual / p.vida_max) * 100 : 0;
         const div = document.createElement('div');
@@ -111,25 +143,28 @@ function renderPersonajes() {
             <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
             <div class="barra"><div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div></div>
             <span id="vida-label-${i}">${p.vida_actual}/${p.vida_max}</span><br>
-            Vida (delta): <input type="number" id="vida-${i}" value="0" style="width:50px;">
-            <button onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
+            Daño/Cura: <input type="number" id="vida-${i}" value="0" style="width:50px;">
+            <button class="button" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
             V.Max: <input type="number" id="vidaMax-${i}" value="${p.vida_max}" style="width:50px;">
-            <button onclick="aplicarVidaMax(${i})">Aplicar</button><br>
-            <button onclick="modificar(${i}, 'vida', 1)">+Vida</button>
+            <button class="button" onclick="aplicarVidaMax(${i})">Aplicar</button><br>
+            <button class="button" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
             <button onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
             Heridas: <span id="heridas-${i}">${p.heridas}</span>
-            <button onclick="modificar(${i}, 'heridas', 1)">+</button>
-            <button onclick="modificar(${i}, 'heridas', -1)">-</button><br>
+            <button class="button" onclick="modificar(${i}, 'heridas', 1)">+</button>
+            <button class="button" onclick="modificar(${i}, 'heridas', -1)">-</button><br>
             Shock: <span id="shock-${i}">${p.shock}</span>
-            <button onclick="modificar(${i}, 'shock', 1)">+</button>
-            <button onclick="modificar(${i}, 'shock', -1)">-</button><br>
+            <button class="button" onclick="modificar(${i}, 'shock', 1)">+</button>
+            <button class="button" onclick="modificar(${i}, 'shock', -1)">-</button><br>
             Inic.: <input type="number" id="inic-${i}" value="${p.iniciativa || 0}" style="width:50px;">
-            <button onclick="aplicarIniciativa(${i})">Aplicar</button><br>
+            <button class="button" onclick="aplicarIniciativa(${i})">Aplicar</button><br>
             Estados: <span id="estados-${i}">${(p.estados || []).join(', ')}</span>
         `;
-        cont.appendChild(div);
+        fila.appendChild(div);
     });
+
+    cont.appendChild(fila);
 }
+
 
 async function modificar(i, tipo, cantidad = 0) {
     const p = personajes[i];
