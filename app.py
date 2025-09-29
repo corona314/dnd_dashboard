@@ -124,7 +124,7 @@ def actualizar():
                     else:
                         if estado not in p["estados"]:
                             p["estados"].append(estado)
-                        if estado in ["Aturdido", "Inconsciente", "Paralizado"] and "Incapacitado" not in p["estados"]:
+                        if estado in ["Aturdido", "Inconsciente", "Paralizado", "Petrificado"] and "Incapacitado" not in p["estados"]:
                             p["estados"].append("Incapacitado")
 
                 elif accion == "quitar":
@@ -133,7 +133,7 @@ def actualizar():
                     else:
                         if estado in p["estados"]:
                             p["estados"].remove(estado)
-                    if estado in ["Aturdido", "Inconsciente", "Paralizado"] and "Incapacitado" in p["estados"]:
+                    if estado in ["Aturdido", "Inconsciente", "Paralizado", "Petrificado"] and "Incapacitado" in p["estados"]:
                         p["estados"].remove("Incapacitado")
 
     # Actualizar ronda si se envía
