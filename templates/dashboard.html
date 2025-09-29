@@ -30,11 +30,6 @@ body {
 
 }
 
-.personaje:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-}
-
 .personaje img {
     width: 100px;
     height: 100px;
@@ -91,11 +86,68 @@ body {
 }
 
 .estado {
+    position: relative;
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 0.8em;
     font-weight: bold;
     color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+/* Indicar que hay descripción con un pequeño círculo */
+.estado::after {
+    content: '•';
+    color: yellow;
+    font-size: 1.2em;
+    margin-left: 2px;
+    vertical-align: middle;
+    opacity: 0.7;
+}
+
+/* Hover: agrandar estado */
+.estado:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+/* Tooltip flotante */
+.estado .tooltip {
+    visibility: hidden;
+    opacity: 0;
+    width: 160px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 6px;
+    position: absolute;
+    bottom: 125%; /* sobre el estado */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s;
+    font-size: 0.75em;
+    pointer-events: none;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+/* Flecha del tooltip */
+.estado .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; 
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+/* Mostrar tooltip al hover */
+.estado:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }
 
 .estado.Agarrado { background-color: #423404; }
@@ -152,40 +204,66 @@ function colorBarra(vida_actual, vida_max) {
     const b = 0;
     return `rgb(${r},${g},${b})`;  
 }
+const descripcionesEstados = {
+    "Agarrado": "Velocidad = 0. Este estado termina si quien agarra queda incapacitado o si algún efecto aleja a la criatura de quien (o lo que) la tiene agarrada",
+    "Apresado": "Velocidad = 0. Ataques contra la criatura: ventaja. Ataques hechos por la criatura: desventaja. Desventaja en las salvaciones de Destreza",
+    "Asustado": "Desventaja en las pruebas de característica y tiradas de ataque mientras pueda ver a la fuente de su miedo. La criatura no puede acercase a la fuente de su miedo voluntariamente",
+    "Aturdido": "Fallo automático de salvaciones de Fuerza y Destreza. Tiradas de ataque contra la criatura: ventaja",
+    "Cansancio": "Depende nivel, consultar manual o DM",
+    "Cegado": "Fallo automático de pruebas de característica que requieran vista. Ataques contra la criatura: ventaja. Ataques hechos por la criatura: desventaja",
+    "Derribado": "Solo podrá moverse arrastrándose. Deventaja en ataques. Ataques contra la criatura: ventaja a 5 pies o menos, desventaja a más distancia",
+    "Ensordecido": "Fallo automático de pruebas de característica que requieran el oído",
+    "Envenenado": "Desventaja en las tiradas de ataque y pruebas de característica",
+    "Hechizado": "No puede atacar ni dañar a quien la hechizó. Quien hechizó a la criatura tiene ventaja en pruebas de característica para interaccionar socialmente con ella",
+    "Incapacitado": "No puede llevar a cabo acciones ni reacciones",
+    "Inconsciente": "Fallo automático de salvaciones de Fuerza y Destreza. Ataques contra la criatura: ventaja, crítico a 5 pies o menos",
+    "Invisible": "Ataques hechos por la criatura: ventaja. Ataques contra la criatura: desventaja",
+    "Paralizado": "Fallo automático de salvaciones de Fuerza y Destreza. Ataques contra la criatura: ventaja, crítico a 5 pies o menos",
+    "Petrificado": "Fallo automático de salvaciones de Fuerza y Destreza. Ataques contra la criatura: ventaja. Resistencia: todo. Inmunidad: veneno/enfermedad"
+};
+function actualizarDashboard(){
+    fetch('/dashboard-data')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
+        const cont = document.getElementById('personajes-dashboard');
+        cont.innerHTML = '';
 
-async function actualizarDashboard(){
-    const res = await fetch('/dashboard-data');
-    const data = await res.json();
-    
-    document.getElementById('ronda-titulo').textContent = `Ronda: ${data.ronda}`;
-
-    const cont = document.getElementById('personajes-dashboard');
-    cont.innerHTML = '';
-    data.personajes.forEach(p => {
-        const estadosHTML = p.estados && p.estados.length
-            ? p.estados.map(e => `<span class="estado ${e}">${e}</span>`).join(' ')
-            : `<span class="estado">Ninguno</span>`;
-        const ancho = (p.vida_actual / p.vida_max) * 100;
-        const color = colorBarra(p.vida_actual, p.vida_max);
-        const claseShock = p.shock == 1 ? "shock" 
+        data.personajes.forEach(p => {
+            const ancho = (p.vida_actual / p.vida_max) * 100;
+            const color = colorBarra(p.vida_actual, p.vida_max);
+            const claseShock = p.shock == 1 ? "shock" 
                 : p.shock == 2 ? "shock-critico" 
                 : p.shock == 3 ? "shock-muerte" 
                 : "";
-        const clases = [claseShock];
-        if (p.turno) clases.push("turno");
+            const clases = [claseShock];
+            if (p.turno) clases.push("turno");
 
-        cont.innerHTML += `
-        <div class="personaje ${clases.join(" ")}">
-            <div class="cabecera">
-                <div class="iniciativa">${p.iniciativa ?? '-'}</div>
-                <h2>${p.nombre}</h2>
-            </div>
-            <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
-            <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${color};"></div></div>
-            <p>Heridas: ${p.heridas}</p>
-            <p>Shock: ${p.shock}</p>
-            <div class="estados">${estadosHTML}</div>
-        </div>`;
+            // Generar HTML de estados con title
+            const estadosHTML = p.estados && p.estados.length
+                ? p.estados.map(e => {
+                    const desc = descripcionesEstados[e] || "Sin descripción";
+                    return `
+                    <span class="estado ${e}">
+                        ${e}
+                        <span class="tooltip">${desc}</span>
+                    </span>`;
+                }).join(' ')
+                : `<span class="estado">Ninguno</span>`;
+
+            cont.innerHTML += `
+            <div class="personaje ${clases.join(" ")}">
+                <div class="cabecera">
+                    <div class="iniciativa">${p.iniciativa ?? '-'}</div>
+                    <h2>${p.nombre}</h2>
+                </div>
+                <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
+                <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${color};"></div></div>
+                <p>Heridas: ${p.heridas}</p>
+                <p>Shock: ${p.shock}</p>
+                <div class="estados">${estadosHTML}</div>
+            </div>`;
+        });
     });
 }
 

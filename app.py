@@ -11,7 +11,7 @@ def cargar_personajes():
     try:
         with open("personajes.json", "r") as f:
             data = json.load(f)
-            return data.get("personajes", [])
+            return data.get("personajes", [])   
     except FileNotFoundError:
         return []
 

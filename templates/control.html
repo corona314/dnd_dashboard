@@ -199,30 +199,38 @@ function renderPersonajes() {
         div.innerHTML = `
             <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
             <div class="barra">
-            <div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div>
+                <div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div>
             </div>
             <span id="vida-label-${i}" class="stat-label">${p.vida_actual}/${p.vida_max}</span><br>
+
             <button class="button button-red" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
             <button class="button button-blue" onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
+
             <label class="label">Daño/Cura:</label>
             <input type="number" id="vida-${i}" value="0" class="input">
             <button class="button" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
+
             <label class="label">V.Max:</label>
             <input type="number" id="vidaMax-${i}" value="${p.vida_max}" class="input">
             <button class="button" onclick="aplicarVidaMax(${i})">Aplicar</button><br>
+
             <label class="label">Heridas:</label>
-            <span id="heridas-${i}">${p.heridas}</span>
+            <span id="heridas-${i}" class="stat-label">${p.heridas}</span>
             <button class="button button-red" onclick="modificar(${i}, 'heridas', 1)">+</button>
             <button class="button button-blue" onclick="modificar(${i}, 'heridas', -1)">-</button><br>
+
             <label class="label">Shock:</label>
-            <span id="shock-${i}">${p.shock}</span>
+            <span id="shock-${i}" class="stat-label">${p.shock}</span>
             <button class="button button-red" onclick="modificar(${i}, 'shock', 1)">+</button>
             <button class="button button-blue" onclick="modificar(${i}, 'shock', -1)">-</button><br>
+
             <label class="label">Inic.:</label>
             <input type="number" id="inic-${i}" value="${p.iniciativa || 0}" class="input">
             <button class="button" onclick="aplicarIniciativa(${i})">Aplicar</button><br>
+
             <label class="label">Estados:</label>
-            <span id="estados-${i}">${(p.estados || []).join(', ')}</span>
+            <span id="estados-${i}" class="stat-label">${(p.estados || []).join(', ')}</span>
+
 
         `;
         fila.appendChild(div);
