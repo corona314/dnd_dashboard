@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Control DnD</title>
+<style>
+body {
+    background-color: #2e2e2e;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+.personaje {
+    border: 1px solid #555;
+    padding: 10px;
+    margin: 10px;
+    width: 220px;
+    display: inline-block;
+    vertical-align: top;
+}
+.barra {
+    background-color: #555;
+    width: 100%;
+    height: 20px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+.barra-vida {
+    height: 100%;
+    width: 0%;
+    border-radius: 5px;
+    background-color: green;
+}
+input, select, button {
+    margin: 2px;
+    font-size: 0.9em;
+}
+button {
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<h1>Control DnD</h1>
+<div id="ronda-titulo">Ronda: 0</div>
+
+<div>
+    <label>Personaje:</label>
+    <select id="personaje-seleccionado"></select>
+</div>
+<div>
+    <label>Estado:</label>
+    <select id="estado-seleccionado">
+        <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
+        <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
+        <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
+        <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
+    </select>
+</div>
+<div>
+    <button onclick="agregarEstado()">Agregar estado</button>
+    <button onclick="quitarEstado()">Quitar estado</button>
+</div>
+<div id="personajes-control"></div>
+<button onclick="pasarTurno()">Pasar turno</button>
+
+<script>
+let personajes = [];
+let ronda = 0;
+let turnoActual = 0;
+let initialized = false;
+
+function colorBarra(vida_actual, vida_max) {
+    const pct = Math.max(0, Math.min(1, vida_actual/vida_max));
+    const r = Math.round(255*(1-pct));
+    const g = Math.round(255*pct);
+    return `rgb(${r},${g},0)`;
+}
+
+async function fetchData() {
+    const res = await fetch('/dashboard-data');
+    const data = await res.json();
+    personajes = data.personajes;
+
+    if (!initialized) {
+        ronda = 0;
+        document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
+        await fetch('/actualizar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ronda: 0 })
+        });
+        initialized = true;
+    } else {
+        ronda = data.ronda ?? ronda;
+        document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
+    }
+
+    const sel = document.getElementById('personaje-seleccionado');
+    sel.innerHTML = personajes.map(p => `<option>${p.nombre}</option>`).join('');
+    renderPersonajes();
+}
+
+function renderPersonajes() {
+    const cont = document.getElementById('personajes-control');
+    cont.innerHTML = '';
+    personajes.forEach((p, i) => {
+        const barraAncho = (p.vida_max > 0) ? (p.vida_actual / p.vida_max) * 100 : 0;
+        const div = document.createElement('div');
+        div.className = 'personaje';
+        div.innerHTML = `
+            <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
+            <div class="barra"><div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div></div>
+            <span id="vida-label-${i}">${p.vida_actual}/${p.vida_max}</span><br>
+            Vida (delta): <input type="number" id="vida-${i}" value="0" style="width:50px;">
+            <button onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
+            V.Max: <input type="number" id="vidaMax-${i}" value="${p.vida_max}" style="width:50px;">
+            <button onclick="aplicarVidaMax(${i})">Aplicar</button><br>
+            <button onclick="modificar(${i}, 'vida', 1)">+Vida</button>
+            <button onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
+            Heridas: <span id="heridas-${i}">${p.heridas}</span>
+            <button onclick="modificar(${i}, 'heridas', 1)">+</button>
+            <button onclick="modificar(${i}, 'heridas', -1)">-</button><br>
+            Shock: <span id="shock-${i}">${p.shock}</span>
+            <button onclick="modificar(${i}, 'shock', 1)">+</button>
+            <button onclick="modificar(${i}, 'shock', -1)">-</button><br>
+            Inic.: <input type="number" id="inic-${i}" value="${p.iniciativa || 0}" style="width:50px;">
+            <button onclick="aplicarIniciativa(${i})">Aplicar</button><br>
+            Estados: <span id="estados-${i}">${(p.estados || []).join(', ')}</span>
+        `;
+        cont.appendChild(div);
+    });
+}
+
+async function modificar(i, tipo, cantidad = 0) {
+    const p = personajes[i];
+    let vida = p.vida_actual || 0;
+    let heridas = p.heridas || 0;
+    let shock = p.shock || 0;
+
+    if (tipo === 'vida') {
+        const delta = Number(cantidad) || 0;
+        vida = Math.max(0, Math.min(p.vida_max || Infinity, (p.vida_actual || 0) + delta));
+    }
+    if (tipo === 'heridas') {
+        const heridas_antes = p.heridas || 0;
+        heridas = Math.max(0, heridas_antes + Number(cantidad || 0));
+        if (Number(cantidad) > 0 && heridas > 3) {
+            const nuevas_heridas = Math.max(0, heridas - Math.max(3, heridas_antes));
+            if (nuevas_heridas > 0) shock = Math.min(3, shock + nuevas_heridas);
+        }
+        if (heridas < 4) shock = 0;
+    }
+    if (tipo === 'shock') {
+        shock = Math.max(0, Math.min(3, (p.shock || 0) + Number(cantidad || 0)));
+    }
+
+    await fetch('/actualizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: p.nombre, vida_actual: vida, heridas: heridas, shock: shock })
+    });
+    await fetchData();
+}
+
+async function aplicarVidaMax(i) {
+    const p = personajes[i];
+    let nuevoMax = parseInt(document.getElementById(`vidaMax-${i}`).value);
+    if (isNaN(nuevoMax) || nuevoMax < 1) return;
+    let nuevaVida = Math.min(p.vida_actual || 0, nuevoMax);
+
+    await fetch('/actualizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: p.nombre, vida_actual: nuevaVida, vida_max: nuevoMax })
+    });
+    await fetchData();
+}
+
+async function aplicarIniciativa(i) {
+    const p = personajes[i];
+    let nuevoValor = parseInt(document.getElementById(`inic-${i}`).value);
+    if (isNaN(nuevoValor)) return;
+
+    await fetch('/actualizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: p.nombre, iniciativa: nuevoValor })
+    });
+    p.iniciativa = nuevoValor;
+    renderPersonajes();
+}
+
+async function agregarEstado() {
+    const nombre = document.getElementById("personaje-seleccionado").value;
+    const estado = document.getElementById("estado-seleccionado").value;
+    if (!nombre || !estado) return;
+
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, estado_accion: "agregar", estado })
+    });
+    await fetchData();
+}
+
+async function quitarEstado() {
+    const nombre = document.getElementById("personaje-seleccionado").value;
+    const estado = document.getElementById("estado-seleccionado").value;
+    if (!nombre || !estado) return;
+
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, estado_accion: "quitar", estado })
+    });
+    await fetchData();
+}
+
+async function pasarTurno() {
+    if (personajes.length === 0) return;
+    const turnoIndices = personajes.map((_, i) => i)
+        .sort((a, b) => (personajes[b].iniciativa || 0) - (personajes[a].iniciativa || 0));
+    personajes.forEach(p => p.turno = false);
+    const idx = turnoIndices[turnoActual];
+    personajes[idx].turno = true;
+    const turnoNombre = personajes[idx].nombre;
+
+    if (turnoActual === 0) {
+        ronda = (ronda === 0) ? 1 : (ronda + 1);
+    }
+
+    await fetch('/actualizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ turno: turnoNombre, ronda })
+    });
+
+    turnoActual = (turnoActual + 1) % turnoIndices.length;
+    renderPersonajes();
+    document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
+}
+
+fetchData();
+</script>
+</body>
+</html>

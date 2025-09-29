@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\coron\Desktop\VSC\dnd_dashboard\venv"
+VIRTUAL_ENV="C:\Users\imano\Desktop\VSC\dnd_dashboard\dnd_dashboard\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
