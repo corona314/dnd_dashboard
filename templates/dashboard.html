@@ -96,16 +96,6 @@ body {
     transition: transform 0.2s;
 }
 
-/* Indicar que hay descripción con un pequeño círculo */
-.estado::after {
-    content: '•';
-    color: yellow;
-    font-size: 1.2em;
-    margin-left: 2px;
-    vertical-align: middle;
-    opacity: 0.7;
-}
-
 /* Hover: agrandar estado */
 .estado:hover {
     transform: scale(1.2);
@@ -166,10 +156,11 @@ body {
 .estado.Paralizado { background-color: #53ebac; }
 .estado.Petrificado { background-color: #5e2500; }
 
-.estado\.Leve { background-color: #90ee90; }     
-.estado\.Moderada { background-color: #ffd700; }   
-.estado\.Grave { background-color: #ff8c00; }     
-.estado\.Crítica { background-color: #ff4500; }
+.estado.Leve { background-color: #093b09; }     
+.estado.Moderada { background-color: #53490d; }   
+.estado.Grave { background-color: #5a3910; }     
+.estado.Crítica { background-color: #632711; }
+
 /* Animación de parpadeo rojo */
 @keyframes parpadeo-rojo {
 0% { background-color: #2e2e2e; }
@@ -283,8 +274,14 @@ function crearPersonajeHTML(p){
     const clases = [claseShock];
     if(p.turno) clases.push("turno");
 
+    // Generar HTML de estados con colores
     const estadosHTML = p.estados && p.estados.length
-        ? p.estados.map(e => `<span class="estado ${e}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`).join(' ')
+        ? p.estados.map(e => {
+            // Detectar nivel de enfermedad y asignar clase CSS
+            const match = e.match(/\((Leve|Moderada|Grave|Crítica)\)$/);
+            const claseNivel = match ? match[1] : e; // si no hay nivel, usa el nombre completo
+            return `<span class="estado ${claseNivel}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`;
+        }).join(' ')
         : `<span class="estado">Ninguno</span>`;
 
     return `
@@ -300,6 +297,7 @@ function crearPersonajeHTML(p){
         <div class="estados">${estadosHTML}</div>
     </div>`;
 }
+
 
 // Función de actualización incremental
 async function actualizarDashboard(){

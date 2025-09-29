@@ -337,13 +337,26 @@ function siguienteNivel(nombreEnf, nivelActual) {
 function renderPersonajeSelects() {
     const selEstado = document.getElementById("personaje-estado");
     const selEnf = document.getElementById("personaje-enfermedad");
+
+    // Guardar selección actual
+    const selEstadoValor = selEstado.value;
+    const selEnfValor = selEnf.value;
+
     selEstado.innerHTML = personajes.map(p => `<option>${p.nombre}</option>`).join('');
     selEnf.innerHTML = personajes.map(p => `<option>${p.nombre}</option>`).join('');
+
+    // Restaurar selección si existe
+    if (personajes.some(p => p.nombre === selEstadoValor)) selEstado.value = selEstadoValor;
+    if (personajes.some(p => p.nombre === selEnfValor)) selEnf.value = selEnfValor;
 }
 
 function renderEnfermedadesSelect() {
     const sel = document.getElementById("enfermedad-seleccionada");
+
+    // Guardar selección actual
+    const selValor = sel.value;
     sel.innerHTML = "";
+
     const nombrePersonaje = document.getElementById("personaje-enfermedad").value;
     const p = personajes.find(p => p.nombre === nombrePersonaje);
 
@@ -352,6 +365,9 @@ function renderEnfermedadesSelect() {
         let nivelMostrar = estadoActual ? siguienteNivel(nombreEnf, estadoActual.match(/\((.+)\)/)[1]) : enfermedadProgresion[nombreEnf][0];
         sel.innerHTML += `<option value="${nombreEnf}">${nombreEnf} (${nivelMostrar})</option>`;
     }
+
+    // Restaurar selección si existe
+    if ([...sel.options].some(o => o.value === selValor)) sel.value = selValor;
 }
 
 async function agregarEstadoNormal() {
