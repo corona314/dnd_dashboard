@@ -8,7 +8,9 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "vaelora.png",
-            "estados": [],
+            "estados": [
+                "Verruga Astral (Moderada)"
+            ],
             "iniciativa": 15,
             "turno": false
         },
@@ -30,7 +32,12 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "adelgo.jpeg",
-            "estados": [],
+            "estados": [
+                "Aturdido",
+                "Incapacitado",
+                "Derribado",
+                "Fiebre de los Pantanos (Leve)"
+            ],
             "iniciativa": 17,
             "turno": false
         },
@@ -39,7 +46,7 @@
             "vida_actual": 3,
             "vida_max": 20,
             "heridas": 0,
-            "shock": 0,
+            "shock": 2,
             "imagen": "lillie.png",
             "estados": [],
             "iniciativa": 1,
