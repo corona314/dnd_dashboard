@@ -93,6 +93,7 @@ body {
     font-weight: bold;
     color: white;
     cursor: pointer;
+    user-select: none;
     transition: transform 0.2s;
 }
 
@@ -113,7 +114,7 @@ body {
     border-radius: 6px;
     padding: 6px;
     position: absolute;
-    bottom: 125%; /* sobre el estado */
+    bottom: 125%;
     left: 50%;
     transform: translateX(-50%);
     transition: opacity 0.3s;
@@ -123,7 +124,7 @@ body {
 }
 
 /* Flecha del tooltip */
-.estado .tooltip::after {
+.estado .tooltip:after {
     content: '';
     position: absolute;
     top: 100%; 
@@ -135,7 +136,9 @@ body {
 }
 
 /* Mostrar tooltip al hover */
-.estado:hover .tooltip {
+.estado:hover .tooltip,
+.estado:active .tooltip,
+.estado:focus .tooltip {
     visibility: visible;
     opacity: 1;
 }
@@ -224,10 +227,10 @@ const descripcionesEstados = {
     "Infección de Herida (Moderada)": "Pierdes 1 PS por hora activa. Desventaja en Fuerza y Destreza",
     "Infección de Herida (Grave)": "Pierdes 1 PS por hora activa. Desventaja en Fuerza y Destreza. Pierdes 1d6 PGM y 1d6 PG/descanso",
     "Infección de Herida (Crítica)": "Pierdes 1 PS por hora activa. Desventaja en Fuerza y Destreza. Pierdes 1d6 PGM y 1d6 PG/descanso. Cada DL: Con DC15 o Cansancio",
-    "Peste Ligera (Gripe del Aarakocra) (Leve)": "Desventaja en Percepción y pasiva -5",
-    "Peste Ligera (Gripe del Aarakocra) (Moderada)": "Desventaja en Percepción y pasiva -5. -2 a Percepción",
-    "Peste Ligera (Gripe del Aarakocra) (Grave)": "Desventaja en Percepción y pasiva -5. -2 a Percepción. -2 a Sabiduría. Pierdes 1d4 PS/descanso",
-    "Peste Ligera (Gripe del Aarakocra) (Crítica)": "Desventaja en Percepción y pasiva -5. -2 a Percepción. -2 a Sabiduría. Pierdes 1d4 PS/descanso. Cada DL: Con DC15 o Cansancio",
+    "Gripe del Aarakocra (Leve)": "Desventaja en Percepción y pasiva -5",
+    "Gripe del Aarakocra (Moderada)": "Desventaja en Percepción y pasiva -5. -2 a Percepción",
+    "Gripe del Aarakocra (Grave)": "Desventaja en Percepción y pasiva -5. -2 a Percepción. -2 a Sabiduría. Pierdes 1d4 PS/descanso",
+    "Gripe del Aarakocra (Crítica)": "Desventaja en Percepción y pasiva -5. -2 a Percepción. -2 a Sabiduría. Pierdes 1d4 PS/descanso. Cada DL: Con DC15 o Cansancio",
     "Migraña (Leve)": "Desventaja en Inteligencia y concentración",
     "Migraña (Moderada)": "Desventaja en Inteligencia y concentración. Con DC12 para mantener concentración",
     "Migraña (Grave)": "Desventaja en Inteligencia y concentración. Con DC12 para mantener concentración. Desventaja en hechizos, -2 a INT/WIS/CHA. Pierdes 1d6 PG/descanso",
@@ -348,7 +351,11 @@ async function actualizarDashboard(){
         const estadosIguales = JSON.stringify(prevEstados) === JSON.stringify(p.estados);
         if(!estadosIguales){
             estadosDiv.innerHTML = p.estados && p.estados.length
-                ? p.estados.map(e => `<span class="estado ${e}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`).join(' ')
+                ? p.estados.map(e => {
+                    const match = e.match(/\((Leve|Moderada|Grave|Crítica)\)$/);
+                    const claseNivel = match ? match[1] : e;
+                    return `<span class="estado ${claseNivel}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`;
+                }).join(' ')
                 : `<span class="estado">Ninguno</span>`;
         }
 

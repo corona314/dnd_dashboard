@@ -33,8 +33,8 @@
             "shock": 0,
             "imagen": "adelgo.jpeg",
             "estados": [
-                "Agarrado",
-                "Ensordecido"
+                "Ensordecido",
+                "Derribado"
             ],
             "iniciativa": 17,
             "turno": false
@@ -47,9 +47,7 @@
             "shock": 0,
             "imagen": "lillie.png",
             "estados": [
-                "Envenenado",
-                "Fiebre de los Pantanos (Leve)",
-                "Migra\u00f1a (Moderada)"
+                "Envenenado"
             ],
             "iniciativa": 1,
             "turno": false

@@ -174,7 +174,7 @@ const enfermedadProgresion = {
     "Pulmonía Trémula": ["Leve", "Moderada", "Grave", "Crítica"],
     "Agua Negra": ["Leve", "Moderada", "Grave", "Crítica"],
     "Infección de Herida": ["Leve", "Moderada", "Grave", "Crítica"],
-    "Peste Ligera (Gripe del Aarakocra)": ["Leve", "Moderada", "Grave", "Crítica"],
+    "Gripe del Aarakocra": ["Leve", "Moderada", "Grave", "Crítica"],
     "Migraña": ["Leve", "Moderada", "Grave", "Crítica"],
     "Parásitos Intestinales": ["Leve", "Moderada", "Grave", "Crítica"],
     "Somnolencia Letárgica": ["Leve", "Moderada", "Grave", "Crítica"],
@@ -361,14 +361,14 @@ function renderEnfermedadesSelect() {
     const p = personajes.find(p => p.nombre === nombrePersonaje);
 
     for (const nombreEnf in enfermedadProgresion) {
-        let estadoActual = p?.estados?.find(e => e.startsWith(nombreEnf));
-        let nivelMostrar = estadoActual ? siguienteNivel(nombreEnf, estadoActual.match(/\((.+)\)/)[1]) : enfermedadProgresion[nombreEnf][0];
-        sel.innerHTML += `<option value="${nombreEnf}">${nombreEnf} (${nivelMostrar})</option>`;
+        // Solo mostramos el nombre base en el desplegable
+        sel.innerHTML += `<option value="${nombreEnf}">${nombreEnf}</option>`;
     }
 
     // Restaurar selección si existe
     if ([...sel.options].some(o => o.value === selValor)) sel.value = selValor;
 }
+
 
 async function agregarEstadoNormal() {
     const nombre = document.getElementById("personaje-estado").value;
