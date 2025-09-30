@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 def cargar_personajes():
     try:
-        with open("personajes.json", "r") as f:
+        with open("personajes.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             return data.get("personajes", [])   
     except FileNotFoundError:
@@ -14,7 +14,7 @@ def cargar_personajes():
 
 def cargar_ronda():
     try:
-        with open("personajes.json", "r") as f:
+        with open("personajes.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             return data.get("ronda", 0)
     except FileNotFoundError:
@@ -22,26 +22,26 @@ def cargar_ronda():
 
 def guardar_personajes(personajes):
     try:
-        with open("personajes.json", "r") as f:
+        with open("personajes.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             ronda = data.get("ronda", 0) 
     except FileNotFoundError:
         ronda = 0
 
-    with open("personajes.json", "w") as f:
-        json.dump({"ronda": ronda, "personajes": personajes}, f, indent=4)
+    with open("personajes.json", "w", encoding="utf-8") as f:
+        json.dump({"ronda": ronda, "personajes": personajes}, f, ensure_ascii=False, indent=4)
 
 
 def guardar_ronda(ronda):
     try:
-        with open("personajes.json", "r") as f:
+        with open("personajes.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             personajes_actuales = data.get("personajes", [])
     except FileNotFoundError:
         personajes_actuales = []
 
-    with open("personajes.json", "w") as f:
-        json.dump({"ronda": ronda, "personajes": personajes_actuales}, f, indent=4)
+    with open("personajes.json", "w", encoding="utf-8") as f:
+        json.dump({"ronda": ronda, "personajes": personajes_actuales}, f, ensure_ascii=False, indent=4)
 
 guardar_ronda(0) # Inicializar ronda en 0
 

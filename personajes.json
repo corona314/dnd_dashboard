@@ -8,9 +8,7 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "vaelora.png",
-            "estados": [
-                "Envenenado"
-            ],
+            "estados": [],
             "iniciativa": 15,
             "turno": false
         },
@@ -32,10 +30,7 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "adelgo.jpeg",
-            "estados": [
-                "Ensordecido",
-                "Derribado"
-            ],
+            "estados": [],
             "iniciativa": 17,
             "turno": false
         },
@@ -46,23 +41,18 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "lillie.png",
-            "estados": [
-                "Envenenado"
-            ],
+            "estados": [],
             "iniciativa": 1,
             "turno": false
         },
         {
-            "nombre": "Jogur",
+            "nombre": "Jögur",
             "vida_actual": 1,
             "vida_max": 20,
             "heridas": 0,
             "shock": 0,
             "imagen": "jormungandr.jpg",
-            "estados": [
-                "Aturdido",
-                "Incapacitado"
-            ],
+            "estados": [],
             "iniciativa": 1,
             "turno": false
         }
