@@ -12,7 +12,7 @@ body {
 }
 .personajes {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
 }
@@ -43,6 +43,7 @@ input, select, button {
     margin: 2px;
     font-size: 0.9em;
 }
+
 label {
     display: inline-block;
     margin: 5px 0;
@@ -71,17 +72,20 @@ select:focus {
     border-color: #9b6b34;
     box-shadow: 0 0 6px #9b6b34;
 }
-input[type="number"], 
+input[type="number"],
 input[type="text"] {
     background-color: #2e2e2e;
     color: white;
     border: 1px solid #555;
     border-radius: 5px;
     padding: 4px 6px;
-    width: 60px;
+    width: 15px;
     text-align: center;
     font-size: 0.9em;
     transition: border-color 0.3s, box-shadow 0.3s;
+}
+input.input-large {
+    width: 60px;
 }
 input:focus {
     outline: none;
@@ -149,7 +153,7 @@ input:focus {
 <!-- Añadir Personajes -->
 <div>   
     <label for="nombrePersonaje">Nombre Personaje</label>
-    <input type="text" id="nombrePersonaje" placeholder="Goblin" />
+    <input type="text" class="input input-large" id="nombrePersonaje" placeholder="Goblin" />
 </div>
 <div>   
     <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
@@ -245,12 +249,12 @@ function renderPersonajes() {
             <button class="button button-red" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
             <button class="button button-blue" onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
 
-            <label class="label">Daño/Cura:</label>
-            <input type="number" id="vida-${i}" value="0" class="input">
+            <label class="label">Delta:</label>
+            <input type="text" id="vida-${i}" value="0" class="input">
             <button class="button" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
 
-            <label class="label">V.Max:</label>
-            <input type="number" id="vidaMax-${i}" value="${p.vida_max}" class="input">
+            <label class="label">Vid.M:</label>
+            <input type="text" id="vidaMax-${i}" value="${p.vida_max}" class="input">
             <button class="button" onclick="aplicarVidaMax(${i})">Aplicar</button><br>
 
             <label class="label">Heridas:</label>
@@ -264,7 +268,7 @@ function renderPersonajes() {
             <button class="button button-blue" onclick="modificar(${i}, 'shock', -1)">-</button><br>
 
             <label class="label">Inic.:</label>
-            <input type="number" id="inic-${i}" value="${p.iniciativa || 0}" class="input">
+            <input type="text" id="inic-${i}" value="${p.iniciativa || 0}" class="input">
             <button class="button" onclick="aplicarIniciativa(${i})">Aplicar</button><br>
 
             <label class="label">Estados:</label>

@@ -1,10 +1,10 @@
 {
-    "ronda": 2,
+    "ronda": 0,
     "personajes": [
         {
             "nombre": "Vaelora",
-            "vida_actual": 17,
-            "vida_max": 17,
+            "vida_actual": 34,
+            "vida_max": 34,
             "heridas": 0,
             "shock": 0,
             "imagen": "vaelora.png",
@@ -14,8 +14,8 @@
         },
         {
             "nombre": "Ken",
-            "vida_actual": 16,
-            "vida_max": 16,
+            "vida_actual": 20,
+            "vida_max": 20,
             "heridas": 0,
             "shock": 0,
             "imagen": "ken.png",
@@ -25,8 +25,8 @@
         },
         {
             "nombre": "Adelgo",
-            "vida_actual": 56,
-            "vida_max": 56,
+            "vida_actual": 21,
+            "vida_max": 21,
             "heridas": 1,
             "shock": 0,
             "imagen": "adelgo.jpeg",
@@ -36,8 +36,8 @@
         },
         {
             "nombre": "Lillie",
-            "vida_actual": 20,
-            "vida_max": 20,
+            "vida_actual": 21,
+            "vida_max": 26,
             "heridas": 0,
             "shock": 0,
             "imagen": "lillie.png",
@@ -47,8 +47,8 @@
         },
         {
             "nombre": "Jögur",
-            "vida_actual": 20,
-            "vida_max": 20,
+            "vida_actual": 22,
+            "vida_max": 22,
             "heridas": 0,
             "shock": 0,
             "imagen": "jormungandr.jpg",
