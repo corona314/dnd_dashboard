@@ -372,7 +372,7 @@ async function actualizarDashboard(){
         // Guardar estado actualizado
         personajesPrev[p.nombre] = {...p};
 
-        // 👉 ELIMINAR personajes que ya no estén en los datos
+        // Eliminar Auto
         Object.keys(personajesPrev).forEach(nombre => {
             if(!data.personajes.some(p => p.nombre === nombre)){
                 const div = document.getElementById(`personaje-${nombre}`);

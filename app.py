@@ -141,33 +141,33 @@ def actualizar():
     if "ronda" in data:
         ronda_actual = data["ronda"]
 
-    if "nombre" in data and "personaje_accion" and "tipo" in data:
-        nombre = data["nombre"]
-        personaje_accion = data["personaje_accion"]
+    personaje_accion = data.get("personaje_accion")
+    nombre = data.get("nombre")
+
+    # Agregar personaje
+    if personaje_accion == "agregar" and nombre and "tipo" in data:
         tipo = data["tipo"]
         if tipo == "Personaje": tipo = "character"
         elif tipo == "Enemigo": tipo = "enemy"
         elif tipo == "NPC": tipo = "npc"
-        if personaje_accion == "agregar":
-            nuevo_personaje = {
-                "nombre": nombre,
-                "vida_actual": 50,
-                "vida_max": 50,
-                "heridas": 0,
-                "shock": 0,
-                "imagen": tipo+".png",
-                "estados": [],
-                "iniciativa": 1,
-                "turno": False,
-                "tipo": tipo,
-            }
-            personajes.append(nuevo_personaje)
-        elif personaje_accion == "eliminar":
-            for p in personajes:
-                if p["nombre"] == nombre: 
-                    personaje_eliminar = p
-                    break
-            personajes.remove(personaje_eliminar)
+        nuevo_personaje = {
+            "nombre": nombre,
+            "vida_actual": 50,
+            "vida_max": 50,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": tipo+".png",
+            "estados": [],
+            "iniciativa": 1,
+            "turno": False,
+            "tipo": tipo,
+        }
+        personajes.append(nuevo_personaje)
+
+    # Eliminar personaje
+    elif personaje_accion == "eliminar" and nombre:
+        personajes = [p for p in personajes if p["nombre"] != nombre]
+
 
     guardar_personajes(personajes)
     guardar_ronda(ronda_actual)
