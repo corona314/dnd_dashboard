@@ -201,8 +201,20 @@ async function actualizarDashboard(){
             const pa = data.personajes.find(p => `personaje-${p.nombre}` === a.id);
             const pb = data.personajes.find(p => `personaje-${p.nombre}` === b.id);
             return (pb?.iniciativa ?? 0) - (pa?.iniciativa ?? 0); // mayor iniciativa primero
-        })
-        .forEach(el => contenedor.appendChild(el)); // reanexa en orden
+        });
+        
+        let hayCambio = false;
+        for (let i = 0; i < sorted.length; i++) {
+            if (sorted[i] !== contenedor.children[i]) {
+                hayCambio = true;
+                break;
+            }
+        }
+
+        // Solo reanexar si hay cambio
+        if (hayCambio) {
+            sorted.forEach(el => contenedor.appendChild(el));
+        }
     });
 }
 
