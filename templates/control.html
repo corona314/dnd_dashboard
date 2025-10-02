@@ -128,15 +128,14 @@ input:focus {
 </style>
 </head>
 <body>
-<h1>Control DnD</h1>
-<div id="ronda-titulo">Ronda: 0</div>
-
-<!-- Controles para Estados normales -->
+    <h1>Control DnD</h1>
+    <div id="ronda-titulo">Ronda: 0</div>
+    <button class="button" onclick="pasarTurno()">Pasar turno</button>
+    
+    <!-- Controles para Estados normales -->
 <div>
     <label>Personaje:</label>
     <select id="personaje-estado"></select>
-</div>
-<div>
     <label>Estado:</label>
     <select id="estado-seleccionado">
         <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
@@ -152,8 +151,11 @@ input:focus {
 
 <!-- Añadir Personajes -->
 <div>   
-    <label for="nombrePersonaje">Nombre Personaje</label>
-    <input type="text" class="input input-large" id="nombrePersonaje" placeholder="Goblin" />
+    <label for="nombrePersonaje">Nombre Personaje: </label>
+    <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Goblin" />
+    <select id="tipoPersonaje">
+        <option>Enemigo</option><option>NPC</option><option>Personaje</option>
+    </select>
 </div>
 <div>   
     <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
@@ -164,8 +166,6 @@ input:focus {
 <div>
     <label>Personaje:</label>
     <select id="personaje-enfermedad"></select>
-</div>
-<div>
     <label>Enfermedad:</label>
     <select id="enfermedad-seleccionada"></select>
 </div>
@@ -174,7 +174,6 @@ input:focus {
   <button class="button" onclick="quitarEnfermedad()">Quitar enfermedad</button>
 </div>
 <div id="personajes-control"></div>
-<button class="button" onclick="pasarTurno()">Pasar turno</button>
 
 <script>
 let personajes = [];
@@ -238,6 +237,21 @@ function renderPersonajes() {
     personajes.forEach((p, i) => {
         const barraAncho = (p.vida_max > 0) ? (p.vida_actual / p.vida_max) * 100 : 0;
         const div = document.createElement('div');
+        const heridasShockHTML = p.tipo === "character" 
+        ? `
+            <label class="label">Heridas:</label>
+            <span id="heridas-${i}" class="stat-label">${p.heridas}</span>
+            <button class="button button-red" onclick="modificar(${i}, 'heridas', 1)">+</button>
+            <button class="button button-blue" onclick="modificar(${i}, 'heridas', -1)">-</button><br>
+
+            <label class="label">Shock:</label>
+            <span id="shock-${i}" class="stat-label">${p.shock}</span>
+            <button class="button button-red" onclick="modificar(${i}, 'shock', 1)">+</button>
+            <button class="button button-blue" onclick="modificar(${i}, 'shock', -1)">-</button><br>
+
+          `
+        : "";
+
         div.className = 'personaje';
         div.innerHTML = `
             <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
@@ -257,15 +271,7 @@ function renderPersonajes() {
             <input type="text" id="vidaMax-${i}" value="${p.vida_max}" class="input">
             <button class="button" onclick="aplicarVidaMax(${i})">Aplicar</button><br>
 
-            <label class="label">Heridas:</label>
-            <span id="heridas-${i}" class="stat-label">${p.heridas}</span>
-            <button class="button button-red" onclick="modificar(${i}, 'heridas', 1)">+</button>
-            <button class="button button-blue" onclick="modificar(${i}, 'heridas', -1)">-</button><br>
-
-            <label class="label">Shock:</label>
-            <span id="shock-${i}" class="stat-label">${p.shock}</span>
-            <button class="button button-red" onclick="modificar(${i}, 'shock', 1)">+</button>
-            <button class="button button-blue" onclick="modificar(${i}, 'shock', -1)">-</button><br>
+            ${heridasShockHTML}
 
             <label class="label">Inic.:</label>
             <input type="text" id="inic-${i}" value="${p.iniciativa || 0}" class="input">
@@ -341,11 +347,12 @@ async function aplicarIniciativa(i) {
 
 async function agregarPersonaje() {
     const nombre = document.getElementById("nombrePersonaje").value;
+    const tipo = document.getElementById("tipoPersonaje").value;
 
     await fetch("/actualizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, personaje_accion: "agregar", })
+        body: JSON.stringify({ nombre, personaje_accion: "agregar", tipo})
     });
     await fetchData();
 

@@ -9,7 +9,8 @@
             "shock": 0,
             "imagen": "vaelora.png",
             "estados": [],
-            "iniciativa": 15,
+            "iniciativa": 10,
+            "tipo": "character",
             "turno": false
         },
         {
@@ -21,6 +22,7 @@
             "imagen": "ken.png",
             "estados": [],
             "iniciativa": 14,
+            "tipo": "character",
             "turno": false
         },
         {
@@ -32,7 +34,8 @@
             "imagen": "adelgo.jpeg",
             "estados": [],
             "iniciativa": 17,
-            "turno": false
+            "tipo": "character",
+            "turno": true
         },
         {
             "nombre": "Lillie",
@@ -42,19 +45,45 @@
             "shock": 0,
             "imagen": "lillie.png",
             "estados": [],
-            "iniciativa": 4,
+            "iniciativa": 18,
+            "tipo": "character",
             "turno": false
         },
         {
             "nombre": "Jögur",
-            "vida_actual": 22,
-            "vida_max": 22,
+            "vida_actual": 24,
+            "vida_max": 24,
             "heridas": 0,
             "shock": 0,
             "imagen": "jormungandr.jpg",
             "estados": [],
             "iniciativa": 19,
-            "turno": true
+            "tipo": "character",
+            "turno": false
+        },
+        {
+            "nombre": "Yggdrasil",
+            "vida_actual": 50,
+            "vida_max": 50,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "example.png",
+            "estados": [],
+            "iniciativa": 11,
+            "turno": false,
+            "tipo": "character"
+        },
+        {
+            "nombre": "Goblin",
+            "vida_actual": 50,
+            "vida_max": 50,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "example.png",
+            "estados": [],
+            "iniciativa": 13,
+            "turno": false,
+            "tipo": "enemy"
         }
     ]
 }

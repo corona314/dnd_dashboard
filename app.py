@@ -141,9 +141,13 @@ def actualizar():
     if "ronda" in data:
         ronda_actual = data["ronda"]
 
-    if "nombre" in data and "personaje_accion" in data:
+    if "nombre" in data and "personaje_accion" and "tipo" in data:
         nombre = data["nombre"]
         personaje_accion = data["personaje_accion"]
+        tipo = data["tipo"]
+        if tipo == "Personaje": tipo = "character"
+        elif tipo == "Enemigo": tipo = "enemy"
+        elif tipo == "NPC": tipo = "npc"
         if personaje_accion == "agregar":
             nuevo_personaje = {
                 "nombre": nombre,
@@ -151,10 +155,11 @@ def actualizar():
                 "vida_max": 50,
                 "heridas": 0,
                 "shock": 0,
-                "imagen": "example.png",
+                "imagen": tipo+".png",
                 "estados": [],
                 "iniciativa": 1,
-                "turno": False
+                "turno": False,
+                "tipo": tipo,
             }
             personajes.append(nuevo_personaje)
         elif personaje_accion == "eliminar":
