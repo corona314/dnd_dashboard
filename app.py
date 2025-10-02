@@ -141,6 +141,29 @@ def actualizar():
     if "ronda" in data:
         ronda_actual = data["ronda"]
 
+    if "nombre" in data and "personaje_accion" in data:
+        nombre = data["nombre"]
+        personaje_accion = data["personaje_accion"]
+        if personaje_accion == "agregar":
+            nuevo_personaje = {
+                "nombre": nombre,
+                "vida_actual": 50,
+                "vida_max": 50,
+                "heridas": 0,
+                "shock": 0,
+                "imagen": "example.png",
+                "estados": [],
+                "iniciativa": 1,
+                "turno": False
+            }
+            personajes.append(nuevo_personaje)
+        elif personaje_accion == "eliminar":
+            for p in personajes:
+                if p["nombre"] == nombre: 
+                    personaje_eliminar = p
+                    break
+            personajes.remove(personaje_eliminar)
+
     guardar_personajes(personajes)
     guardar_ronda(ronda_actual)
     return jsonify({"status": "ok"})

@@ -129,31 +129,41 @@ input:focus {
 
 <!-- Controles para Estados normales -->
 <div>
-  <label>Personaje:</label>
-  <select id="personaje-estado"></select>
+    <label>Personaje:</label>
+    <select id="personaje-estado"></select>
 </div>
 <div>
-  <label>Estado:</label>
-  <select id="estado-seleccionado">
-    <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
-    <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
-    <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
-    <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
-  </select>
+    <label>Estado:</label>
+    <select id="estado-seleccionado">
+        <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
+        <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
+        <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
+        <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
+    </select>
 </div>
 <div>
-  <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
-  <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
+    <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
+    <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
 </div>
 
+<!-- Añadir Personajes -->
+<div>   
+    <label for="nombrePersonaje">Nombre Personaje</label>
+    <input type="text" id="nombrePersonaje" placeholder="Goblin" />
+</div>
+<div>   
+    <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
+    <button class="button" onclick="eliminarPersonaje()">Eliminar Personaje</button>
+
+</div>
 <!-- Controles para Enfermedades -->
 <div>
-  <label>Personaje:</label>
-  <select id="personaje-enfermedad"></select>
+    <label>Personaje:</label>
+    <select id="personaje-enfermedad"></select>
 </div>
 <div>
-  <label>Enfermedad:</label>
-  <select id="enfermedad-seleccionada"></select>
+    <label>Enfermedad:</label>
+    <select id="enfermedad-seleccionada"></select>
 </div>
 <div>
   <button class="button" onclick="agregarEnfermedad()">Agregar enfermedad</button>
@@ -214,8 +224,6 @@ async function fetchData() {
     renderPersonajeSelects();
     renderEnfermedadesSelect();
 }
-
-    
 
 function renderPersonajes() {
     const cont = document.getElementById('personajes-control');
@@ -327,6 +335,30 @@ async function aplicarIniciativa(i) {
     renderPersonajes();
 }
 
+async function agregarPersonaje() {
+    const nombre = document.getElementById("nombrePersonaje").value;
+
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, personaje_accion: "agregar", })
+    });
+    await fetchData();
+
+}
+
+async function eliminarPersonaje() {
+    const nombre = document.getElementById("nombrePersonaje").value;
+
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, personaje_accion: "eliminar", })
+    });
+    await fetchData();
+
+}
+
 function siguienteNivel(nombreEnf, nivelActual) {
     const niveles = enfermedadProgresion[nombreEnf];
     const idx = niveles.indexOf(nivelActual);
@@ -368,7 +400,6 @@ function renderEnfermedadesSelect() {
     // Restaurar selección si existe
     if ([...sel.options].some(o => o.value === selValor)) sel.value = selValor;
 }
-
 
 async function agregarEstadoNormal() {
     const nombre = document.getElementById("personaje-estado").value;
@@ -431,7 +462,6 @@ async function agregarEnfermedad() {
     renderEnfermedadesSelect();
 }
 
-
 async function quitarEnfermedad() {
     const nombre = document.getElementById("personaje-enfermedad").value;
     const enfNombre = document.getElementById("enfermedad-seleccionada").value;
@@ -452,7 +482,7 @@ async function quitarEnfermedad() {
 }
 
 
-// --- Turnos ---
+// Turnos
 async function pasarTurno() {
     if (personajes.length === 0) return;
     const turnoIndices = personajes.map((_, i) => i)
