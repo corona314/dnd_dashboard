@@ -1,0 +1,184 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    text-align: center;
+}
+
+.personajes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.personaje {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+}
+
+.personaje img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.personaje.turno {
+    border: 2px solid yellow;
+    box-shadow: 0 0 15px yellow;
+    transform: scale(1.05);
+}
+
+.cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.iniciativa {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px  1px 0 #000,
+        1px  1px 0 #000; 
+}
+
+.vida {
+    background: #555;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.barra {
+    height: 100%;
+    width: 0%;
+    border-radius: 5px;
+    transition: width 0.5s, background-color 0.5s;
+}
+
+.estados {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
+
+.estado {
+    position: relative;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s;
+}
+
+/* Hover: agrandar estado */
+.estado:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+/* Tooltip flotante */
+.estado .tooltip {
+    visibility: hidden;
+    opacity: 0;
+    width: 160px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 6px;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s;
+    font-size: 0.75em;
+    pointer-events: none;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+/* Flecha del tooltip */
+.estado .tooltip:after {
+    content: '';
+    position: absolute;
+    top: 100%; 
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+/* Mostrar tooltip al hover */
+.estado:hover .tooltip,
+.estado:active .tooltip,
+.estado:focus .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.estado.Agarrado { background-color: #423404; }
+.estado.Apresado { background-color: #b6e702; }
+.estado.Asustado { background-color: #000275; }
+.estado.Aturdido { background-color: #b10ff1; }
+.estado.Cansancio { background-color: #90b2b5; }
+.estado.Cegado { background-color: #7c7c7c; }
+.estado.Derribado { background-color: #d35400; }
+.estado.Ensordecido { background-color: #16a085; }
+.estado.Envenenado { background-color: #00f314; }
+.estado.Hechizado { background-color: #e092ff; }
+.estado.Incapacitado { background-color: #e74c3c; }
+.estado.Inconsciente { background-color: #2c3e50; }
+.estado.Invisible { background-color: #7f8c8d; }
+.estado.Paralizado { background-color: #53ebac; }
+.estado.Petrificado { background-color: #5e2500; }
+
+.estado.Leve { background-color: #093b09; }     
+.estado.Moderada { background-color: #53490d; }   
+.estado.Grave { background-color: #5a3910; }     
+.estado.Crítica { background-color: #632711; }
+
+/* Animación de parpadeo rojo */
+@keyframes parpadeo-rojo {
+0% { background-color: #2e2e2e; }
+50% { background-color: #ff0000ab; }
+100% { background-color: #2e2e2e; }
+}
+/* Animación de parpadeo naranja */
+@keyframes parpadeo-naranja {
+    0% { background-color: #2e2e2e; }
+    50% { background-color: #ff8000ab; }
+    100% { background-color: #2e2e2e; }
+}
+
+.personaje.shock-critico {
+    animation: parpadeo-rojo 2s infinite;
+}
+.personaje.shock {
+    animation: parpadeo-naranja 2s infinite;
+}
+.personaje.shock-muerte {
+    background-color: #000000;
+    animation: none;        
+}
+
