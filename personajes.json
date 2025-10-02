@@ -35,11 +35,7 @@
             "estados": [],
             "iniciativa": 17,
             "tipo": "character",
-<<<<<<< HEAD
-            "turno": true
-=======
             "turno": false
->>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
         },
         {
             "nombre": "Lillie",
@@ -63,35 +59,7 @@
             "estados": [],
             "iniciativa": 19,
             "tipo": "character",
-<<<<<<< HEAD
-            "turno": false
-        },
-        {
-            "nombre": "Yggdrasil",
-            "vida_actual": 50,
-            "vida_max": 50,
-            "heridas": 0,
-            "shock": 0,
-            "imagen": "example.png",
-            "estados": [],
-            "iniciativa": 11,
-            "turno": false,
-            "tipo": "character"
-        },
-        {
-            "nombre": "Goblin",
-            "vida_actual": 50,
-            "vida_max": 50,
-            "heridas": 0,
-            "shock": 0,
-            "imagen": "example.png",
-            "estados": [],
-            "iniciativa": 13,
-            "turno": false,
-            "tipo": "enemy"
-=======
             "turno": true
->>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
         }
     ]
 }

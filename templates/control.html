@@ -28,15 +28,9 @@
 </div>
 
 <!-- Añadir Personajes -->
-<<<<<<< HEAD
-<div>   
-    <label for="nombrePersonaje">Nombre Personaje: </label>
-    <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Goblin" />
-=======
 <div>
     <label for="nombrePersonaje">Nombre Personaje: </label>
     <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Ej. Goblin" />
->>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
     <select id="tipoPersonaje">
         <option>Enemigo</option><option>NPC</option><option>Personaje</option>
     </select>
@@ -229,10 +223,6 @@ async function aplicarIniciativa(i) {
 }
 
 async function agregarPersonaje() {
-<<<<<<< HEAD
-    const nombre = document.getElementById("nombrePersonaje").value;
-    const tipo = document.getElementById("tipoPersonaje").value;
-=======
     const nombre = document.getElementById("nombrePersonaje").value.trim();
     const tipo = document.getElementById("tipoPersonaje").value;
 
@@ -245,16 +235,11 @@ async function agregarPersonaje() {
         alert("Ya existe un personaje con ese nombre.");
         return;
     }
->>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
 
     await fetch("/actualizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-<<<<<<< HEAD
-        body: JSON.stringify({ nombre, personaje_accion: "agregar", tipo})
-=======
         body: JSON.stringify({ nombre, personaje_accion: "agregar", tipo })
->>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
     });
     await fetchData();
 }
