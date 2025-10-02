@@ -56,9 +56,7 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "jormungandr.jpg",
-            "estados": [
-                "Fiebre de los Pantanos (Moderada)"
-            ],
+            "estados": [],
             "iniciativa": 21,
             "tipo": "character",
             "turno": true

@@ -79,7 +79,7 @@ input[type="text"] {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 input.input-large {
-    width: 60px;
+    width: 68px;
 }
 input:focus {
     outline: none;

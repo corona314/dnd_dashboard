@@ -156,10 +156,9 @@ async function actualizarDashboard(){
         }
 
         // Solo reanexar si hay cambio
-        if (hayCambio) {
-            sorted.forEach(el => contenedor.appendChild(el));
-        }
+        
     });
+    sorted.forEach(el => contenedor.appendChild(el));
 }
 
 // Llamada inicial
