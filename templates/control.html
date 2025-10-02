@@ -3,129 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Control DnD</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #1e1e1e;
-    color: white;
-    text-align: center;
-}
-.personajes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-.personaje {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 200px;
-    text-align: center;
-    background-color: #2e2e2e;
-    border-radius: 8px;
-    color: white;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.barra {
-    background-color: #555;
-    width: 100%;
-    height: 20px;
-    border-radius: 5px;
-    margin: 5px 0;
-}
-.barra-vida {
-    height: 100%;
-    width: 0%;
-    border-radius: 5px;
-    background-color: green;
-}
-input, select, button {
-    margin: 2px;
-    font-size: 0.9em;
-}
-
-label {
-    display: inline-block;
-    margin: 5px 0;
-    font-weight: bold;
-    color: #d4c6a8;
-    text-shadow: 1px 1px 2px #000;
-}
-.stat-label {
-    display: inline-block;
-    margin: 4px 0;
-    font-weight: bold;
-    color: #ddd;
-}
-select {
-    background-color: #2e2e2e;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 5px;
-    padding: 4px 8px;
-    font-size: 0.9em;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-select:focus {
-    outline: none;
-    border-color: #9b6b34;
-    box-shadow: 0 0 6px #9b6b34;
-}
-input[type="number"],
-input[type="text"] {
-    background-color: #2e2e2e;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 5px;
-    padding: 4px 6px;
-    width: 15px;
-    text-align: center;
-    font-size: 0.9em;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-input.input-large {
-    width: 60px;
-}
-input:focus {
-    outline: none;
-    border-color: #356de5;
-    box-shadow: 0 0 6px #356de5;
-}
-.button {
-    background-color: #9b6b34; 
-    border: none;
-    color: white;
-    padding: 6px 12px;
-    margin: 2px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s, transform 0.2s;
-}
-.button:hover {
-    background-color: #643e13;
-    transform: scale(1.05);
-}
-.button:active {
-    background-color: #ac8b66;
-    transform: scale(0.95);
-}
-.button-red {
-    background-color: #864a49;
-}
-.button-red:hover {
-    background-color: #522c2b;
-}
-
-.button-blue {
-    background-color: #5d72a0;
-}
-.button-blue:hover {
-    background-color: #35425e;
-}
-
-</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='control_style.css') }}">
 </head>
 <body>
     <h1>Control DnD</h1>
@@ -150,14 +28,20 @@ input:focus {
 </div>
 
 <!-- Añadir Personajes -->
+<<<<<<< HEAD
 <div>   
     <label for="nombrePersonaje">Nombre Personaje: </label>
     <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Goblin" />
+=======
+<div>
+    <label for="nombrePersonaje">Nombre Personaje: </label>
+    <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Ej. Goblin" />
+>>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
     <select id="tipoPersonaje">
         <option>Enemigo</option><option>NPC</option><option>Personaje</option>
     </select>
 </div>
-<div>   
+<div>
     <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
     <button class="button" onclick="eliminarPersonaje()">Eliminar Personaje</button>
 
@@ -196,7 +80,6 @@ const enfermedadProgresion = {
     "Verruga Astral": ["Leve", "Moderada", "Grave", "Crítica"],
     "Sombra Consumidora": ["Leve", "Moderada", "Grave", "Crítica"]
 };
-
 
 function colorBarra(vida_actual, vida_max) {
     const pct = Math.max(0, Math.min(1, vida_actual/vida_max));
@@ -346,16 +229,34 @@ async function aplicarIniciativa(i) {
 }
 
 async function agregarPersonaje() {
+<<<<<<< HEAD
     const nombre = document.getElementById("nombrePersonaje").value;
     const tipo = document.getElementById("tipoPersonaje").value;
+=======
+    const nombre = document.getElementById("nombrePersonaje").value.trim();
+    const tipo = document.getElementById("tipoPersonaje").value;
+
+    // Validaciones
+    if (!nombre) {
+        alert("El nombre no puede estar vacío.");
+        return;
+    }
+    if (personajes.some(p => p.nombre.toLowerCase() === nombre.toLowerCase())) {
+        alert("Ya existe un personaje con ese nombre.");
+        return;
+    }
+>>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
 
     await fetch("/actualizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+<<<<<<< HEAD
         body: JSON.stringify({ nombre, personaje_accion: "agregar", tipo})
+=======
+        body: JSON.stringify({ nombre, personaje_accion: "agregar", tipo })
+>>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
     });
     await fetchData();
-
 }
 
 async function eliminarPersonaje() {
@@ -492,8 +393,6 @@ async function quitarEnfermedad() {
     renderEnfermedadesSelect();
 }
 
-
-// Turnos
 async function pasarTurno() {
     if (personajes.length === 0) return;
     const turnoIndices = personajes.map((_, i) => i)

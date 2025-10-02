@@ -35,7 +35,11 @@
             "estados": [],
             "iniciativa": 17,
             "tipo": "character",
+<<<<<<< HEAD
             "turno": true
+=======
+            "turno": false
+>>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
         },
         {
             "nombre": "Lillie",
@@ -59,6 +63,7 @@
             "estados": [],
             "iniciativa": 19,
             "tipo": "character",
+<<<<<<< HEAD
             "turno": false
         },
         {
@@ -84,6 +89,9 @@
             "iniciativa": 13,
             "turno": false,
             "tipo": "enemy"
+=======
+            "turno": true
+>>>>>>> bc663067ad83ffaca8244f977791cb189cd62fed
         }
     ]
 }
