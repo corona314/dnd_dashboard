@@ -286,6 +286,13 @@ function crearPersonajeHTML(p){
             return `<span class="estado ${claseNivel}">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`;
         }).join(' ')
         : `<span class="estado">Ninguno</span>`;
+   
+   const heridasShockHTML = p.tipo === "character" 
+        ? `
+            <p>Heridas: <span class="heridas">${p.heridas}</span></p>
+            <p>Shock: <span class="shock">${p.shock}</span></p>
+          `
+        : "";
 
     return `
     <div class="personaje ${clases.join(" ")}" id="personaje-${p.nombre}">
@@ -295,8 +302,7 @@ function crearPersonajeHTML(p){
         </div>
         <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
         <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${colorBarra(p.vida_actual,p.vida_max)};"></div></div>
-        <p>Heridas: <span class="heridas">${p.heridas}</span></p>
-        <p>Shock: <span class="shock">${p.shock}</span></p>
+        ${heridasShockHTML}
         <div class="estados">${estadosHTML}</div>
     </div>`;
 }
@@ -336,6 +342,10 @@ async function actualizarDashboard(){
             else if(p.shock == 3) div.classList.add('shock-muerte');
             if(p.turno) div.classList.add('turno');
         }
+        // Actualizar iniciativa
+        if (prev.iniciativa !== p.iniciativa) {
+            div.querySelector('.iniciativa').textContent = p.iniciativa ?? '-';
+        }
 
         // Heridas y shock numérico
         if(prev.heridas !== p.heridas){
@@ -361,6 +371,23 @@ async function actualizarDashboard(){
 
         // Guardar estado actualizado
         personajesPrev[p.nombre] = {...p};
+
+        // 👉 ELIMINAR personajes que ya no estén en los datos
+        Object.keys(personajesPrev).forEach(nombre => {
+            if(!data.personajes.some(p => p.nombre === nombre)){
+                const div = document.getElementById(`personaje-${nombre}`);
+                if(div) div.remove();
+                delete personajesPrev[nombre];
+            }
+        });
+
+        const contenedor = document.getElementById('personajes-dashboard');
+        [...contenedor.children].sort((a, b) => {
+            const pa = data.personajes.find(p => `personaje-${p.nombre}` === a.id);
+            const pb = data.personajes.find(p => `personaje-${p.nombre}` === b.id);
+            return (pb?.iniciativa ?? 0) - (pa?.iniciativa ?? 0); // mayor iniciativa primero
+        })
+        .forEach(el => contenedor.appendChild(el)); // reanexa en orden
     });
 }
 
