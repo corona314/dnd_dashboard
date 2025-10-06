@@ -69,7 +69,7 @@ body::after {
 
 /* Ligera distorsión de color tipo RGB */
 #personajes-dashboard {
-    filter: contrast(1.15) saturate(1.15);
+    filter: contrast(1.15) saturate(2.15);
     transform: scale(1.05);
     transform-style: preserve-3d;
     text-shadow: 0 0 1px red, 0 0 1px cyan;
