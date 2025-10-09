@@ -1,5 +1,5 @@
 {
-    "ronda": 0,
+    "ronda": 1,
     "personajes": [
         {
             "nombre": "Vaelora",
@@ -9,7 +9,7 @@
             "shock": 0,
             "imagen": "vaelora.png",
             "estados": [],
-            "iniciativa": 10,
+            "iniciativa": -5,
             "tipo": "character",
             "turno": false
         },
@@ -21,7 +21,7 @@
             "shock": 0,
             "imagen": "ken.png",
             "estados": [],
-            "iniciativa": 14,
+            "iniciativa": 8,
             "tipo": "character",
             "turno": false
         },
@@ -33,7 +33,7 @@
             "shock": 0,
             "imagen": "adelgo.jpeg",
             "estados": [],
-            "iniciativa": 17,
+            "iniciativa": 10,
             "tipo": "character",
             "turno": false
         },
@@ -45,9 +45,9 @@
             "shock": 0,
             "imagen": "lillie.png",
             "estados": [],
-            "iniciativa": 18,
+            "iniciativa": 11,
             "tipo": "character",
-            "turno": false
+            "turno": true
         },
         {
             "nombre": "Jögur",
@@ -57,9 +57,21 @@
             "shock": 0,
             "imagen": "jormungandr.jpg",
             "estados": [],
-            "iniciativa": 21,
+            "iniciativa": 17,
             "tipo": "character",
-            "turno": true
+            "turno": false
+        },
+        {
+            "nombre": "Espino1",
+            "vida_actual": 0,
+            "vida_max": 22,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "enemy.png",
+            "estados": [],
+            "iniciativa": 19,
+            "turno": false,
+            "tipo": "enemy"
         }
     ]
 }
