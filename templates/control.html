@@ -6,51 +6,85 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='control_style.css') }}">
 </head>
 <body>
-    <h1>Control DnD</h1>
+
+<!-- Contenedor principal con dos columnas -->
+<div id="dashboard" style="display:flex; align-items:flex-start;">
+
+    <!-- Columna izquierda -->
+    <div id="columna-izquierda" style="flex:1;">
+        <h1>Control DnD</h1>
     <div id="ronda-titulo">Ronda: 0</div>
     <button class="button" onclick="pasarTurno()">Pasar turno</button>
-    
-    <!-- Controles para Estados normales -->
-<div>
-    <label>Personaje:</label>
-    <select id="personaje-estado"></select>
-    <label>Estado:</label>
-    <select id="estado-seleccionado">
-        <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
-        <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
-        <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
-        <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
-    </select>
-</div>
-<div>
-    <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
-    <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
+
+        <!-- Estados normales -->
+        <section>
+            <div>
+                <h3 style="margin-right:20px; display:inline-block;">Estados</h3>
+                <label>Personaje:</label>
+                <select id="personaje-estado"></select>
+
+                <label>Estado:</label>
+                <select id="estado-seleccionado">
+                    <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
+                    <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
+                    <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
+                    <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
+                </select>
+            </div>
+            <div>
+                <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
+                <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
+            </div>
+
+            <!-- Enfermedades -->
+            <div>
+                <h3 style="margin-right:20px; display:inline-block;">Enfermedades</h3>
+                <label>Personaje:</label>
+                <select id="personaje-enfermedad"></select>
+                <label>Enfermedad:</label>
+                <select id="enfermedad-seleccionada"></select>
+            </div>
+            <div>
+                <button class="button" onclick="agregarEnfermedad()">Agregar enfermedad</button>
+                <button class="button" onclick="quitarEnfermedad()">Quitar enfermedad</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Columna derecha -->
+    <div id="columna-derecha" style="flex:1;">
+        <!-- Personajes -->
+        <section>
+            <div>
+                <h3 style="margin-right:20px; margin-top:65px; display:inline-block;">Agregar Personaje</h3>
+                <label for="nombrePersonaje">Nombre Personaje:</label>
+                <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Ej. Goblin">
+                <select id="tipoPersonaje">
+                    <option>Enemigo</option><option>NPC</option><option>Personaje</option>
+                </select>
+            </div>
+            <div>
+                <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
+                <button class="button" onclick="eliminarPersonaje()">Eliminar Personaje</button>
+            </div>
+
+            <!-- Enemigos desde API -->
+            <div>
+                <h3 style="margin-right:20px; display:inline-block;">Enemigos API</h3>
+                <label for="enemigoAPI">Buscar enemigo:</label>
+                <input type="text" class="input input-large" id="busquedaAPI" placeholder="Escribe para filtrar..." oninput="filtrarListaAPI()">
+                <select id="enemigoAPI" size="6" style="width: 250px;"></select>
+            </div>
+            <div>
+                <button class="button" onclick="agregarDesdeAPISeleccionado()">Agregar enemigo desde API</button>
+                <button class="button" onclick="eliminarEnemigos()">Eliminar Enemigos</button>
+            </div>
+        </section>
+    </div>
+
 </div>
 
-<!-- Añadir Personajes -->
-<div>
-    <label for="nombrePersonaje">Nombre Personaje: </label>
-    <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Ej. Goblin" />
-    <select id="tipoPersonaje">
-        <option>Enemigo</option><option>NPC</option><option>Personaje</option>
-    </select>
-</div>
-<div>
-    <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
-    <button class="button" onclick="eliminarPersonaje()">Eliminar Personaje</button>
-
-</div>
-<!-- Controles para Enfermedades -->
-<div>
-    <label>Personaje:</label>
-    <select id="personaje-enfermedad"></select>
-    <label>Enfermedad:</label>
-    <select id="enfermedad-seleccionada"></select>
-</div>
-<div>
-  <button class="button" onclick="agregarEnfermedad()">Agregar enfermedad</button>
-  <button class="button" onclick="quitarEnfermedad()">Quitar enfermedad</button>
-</div>
+<hr>
 <div id="personajes-control"></div>
 
 <script>
@@ -402,9 +436,118 @@ async function pasarTurno() {
     document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
 }
 
+async function eliminarEnemigos() {
+    if (!confirm("¿Estás seguro de que quieres eliminar todos los enemigos?")) return;
+
+    // Filtramos los enemigos
+    const enemigos = personajes.filter(p => p.tipo === "enemy");
+
+    // Por cada enemigo, hacemos la petición de eliminación
+    for (const e of enemigos) {
+        await fetch("/actualizar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre: e.nombre, personaje_accion: "eliminar" })
+        });
+    }
+
+    // Actualizamos la lista local y la interfaz
+    await fetchData();
+}
+
 document.getElementById("personaje-enfermedad").addEventListener("change", renderEnfermedadesSelect);
 
 fetchData();
+
+let listaEnemigosAPI = [];  // Lista cacheada
+let apiCargada = false;
+
+// Cargar enemigos desde el JSON local
+async function cargarListaAPI() {
+  if (apiCargada) return; // evita recargar
+
+  const sel = document.getElementById("enemigoAPI");
+  sel.innerHTML = "<option>Cargando enemigos...</option>";
+
+  try {
+    // Cargar el JSON local
+    const res = await fetch("/static/monsters_names.json"); // asegúrate de poner el JSON en /static/
+    listaEnemigosAPI = await res.json();
+    listaEnemigosAPI.sort((a, b) => a.localeCompare(b));
+    apiCargada = true;
+
+    renderListaAPI();
+  } catch (e) {
+    console.error("Error cargando JSON de monstruos:", e);
+    sel.innerHTML = "<option>Error cargando enemigos</option>";
+  }
+}
+
+// Renderiza la lista completa (o filtrada)
+function renderListaAPI(filtro = "") {
+  const sel = document.getElementById("enemigoAPI");
+  if (!listaEnemigosAPI.length) {
+    sel.innerHTML = "<option>No se encontraron enemigos</option>";
+    return;
+  }
+
+  const filtrados = listaEnemigosAPI
+    .filter(n => n.toLowerCase().includes(filtro.toLowerCase()))
+    .slice(0, 100); // solo primeros 100 para rendimiento
+
+  sel.innerHTML = filtrados.length
+    ? filtrados.map(n => `<option>${n}</option>`).join("")
+    : "<option>Sin coincidencias</option>";
+}
+
+// Filtrar enemigos mientras se escribe
+function filtrarListaAPI() {
+  const filtro = document.getElementById("busquedaAPI").value;
+  renderListaAPI(filtro);
+}
+
+// Agregar el enemigo seleccionado
+async function agregarDesdeAPISeleccionado() {
+  const sel = document.getElementById("enemigoAPI");
+  const nombre = sel.value;
+  if (!nombre) {
+    alert("Selecciona un enemigo de la lista.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/enemigo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre })
+    });
+
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      console.error("No se recibió JSON válido:", e);
+      alert("Error del servidor: no se recibió respuesta JSON.");
+      return;
+    }
+
+    if (!res.ok) {
+      alert(data.error || "Error al agregar enemigo desde API.");
+      return;
+    }
+
+    alert(`✅ Se agregó ${data.enemigo.nombre} con ${data.enemigo.vida_max} PV.`);
+    await fetchData();
+  } catch (e) {
+    console.error("Error al conectar con el servidor:", e);
+    alert("No se pudo conectar con el servidor.");
+  }
+}
+
+// Cargar la lista al inicio
+cargarListaAPI();
+
+
 </script>
 
 </body>

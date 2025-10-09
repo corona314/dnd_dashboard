@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import json
+import requests
 
 # Flask
 app = Flask(__name__)
@@ -183,6 +184,61 @@ def dashboard_data():
         "ronda": ronda,
         "personajes": personajes_ordenados
     })
+
+
+@app.route("/api/enemigo", methods=["POST"])
+def agregar_enemigo_api():
+    data = request.get_json()
+    nombre = data.get("nombre")
+
+    if not nombre:
+        return jsonify({"error": "Debe proporcionar un nombre"}), 400
+
+    # Llamar a la API
+    resp = requests.get("https://api.open5e.com/monsters/", params={"search": nombre})
+    if resp.status_code != 200:
+        return jsonify({"error": "No se pudo obtener datos de la API"}), 500
+
+    resultados = resp.json().get("results", [])
+    if not resultados:
+        return jsonify({"error": f"No se encontró ningún enemigo llamado '{nombre}'"}), 404
+
+    # Tomamos el primer resultado que coincida
+    monster = resultados[0]
+
+    # Extraer atributos
+    vida_max = monster.get("hit_points", 10)
+
+    personajes = cargar_personajes()
+
+    # Generar nombre único
+    nombre_base = nombre.strip()
+    contador = 1
+    nombres_existentes = [p["nombre"].lower() for p in personajes]
+
+    while nombre.lower() in nombres_existentes:
+        nombre = f"{nombre_base}{contador}"
+        contador += 1
+
+    # Crear nuevo enemigo
+    nuevo = {
+        "nombre": nombre,
+        "vida_actual": vida_max,
+        "vida_max": vida_max,
+        "heridas": 0,
+        "shock": 0,
+        "imagen": "enemy.png",
+        "estados": [],
+        "iniciativa": 30,
+        "turno": False,
+        "tipo": "enemy"
+    }
+
+    personajes.append(nuevo)
+    guardar_personajes(personajes)
+
+    return jsonify({"status": "ok", "enemigo": nuevo})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
