@@ -169,7 +169,6 @@ def actualizar():
     elif personaje_accion == "eliminar" and nombre:
         personajes = [p for p in personajes if p["nombre"] != nombre]
 
-
     guardar_personajes(personajes)
     guardar_ronda(ronda_actual)
     return jsonify({"status": "ok"})

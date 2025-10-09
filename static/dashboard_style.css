@@ -1,8 +1,79 @@
+/* ===============================
+   EFECTO CRT (Televisión antigua)
+   =============================== */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #1e1e1e;
     color: white;
     text-align: center;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Pantalla completa con líneas de escaneo */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9998;
+
+    /* Líneas horizontales claras y más marcadas */
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 3px
+    );
+
+    /* Mueve las líneas para simular refresco CRT */
+    animation: scanlines 1.2s linear infinite;
+
+    /* Este modo mantiene el efecto visible incluso sobre fondos oscuros */
+    mix-blend-mode: lighten;
+    opacity: 0.25;
+}
+
+/* Parpadeo y leve interferencia */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.15) 100%);
+    animation: flicker 0.25s infinite alternate;
+    opacity: 0.4;
+    mix-blend-mode: soft-light;
+}
+
+@keyframes scanlines {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 8px; }
+}
+
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 0.5; }
+    20%, 24%, 55% { opacity: 0.8; }
+}
+
+/* Ligera distorsión de color tipo RGB */
+#personajes-dashboard {
+    filter: contrast(1.15) saturate(2.15);
+    transform: scale(1.05);
+    transform-style: preserve-3d;
+    text-shadow: 0 0 1px red, 0 0 1px cyan;
+    padding: 30px;
 }
 
 .personajes {

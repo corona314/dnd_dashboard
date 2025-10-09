@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard_style.css') }}">
 </head>
 <body>
+
 <h1 id="ronda-titulo">Ronda: 0</h1>
 <div class="personajes" id="personajes-dashboard"></div>
 
@@ -131,7 +132,7 @@ async function actualizarDashboard(){
         // Guardar estado actualizado
         personajesPrev[p.nombre] = {...p};
 
-        // Eliminar Auto
+        // Eliminar Personajes Automáticamente
         Object.keys(personajesPrev).forEach(nombre => {
             if(!data.personajes.some(p => p.nombre === nombre)){
                 const div = document.getElementById(`personaje-${nombre}`);
@@ -139,26 +140,23 @@ async function actualizarDashboard(){
                 delete personajesPrev[nombre];
             }
         });
-
-        const contenedor = document.getElementById('personajes-dashboard');
-        const sorted = [...contenedor.children].sort((a, b) => {
-            const pa = data.personajes.find(p => `personaje-${p.nombre}` === a.id);
-            const pb = data.personajes.find(p => `personaje-${p.nombre}` === b.id);
-            return (pb?.iniciativa ?? 0) - (pa?.iniciativa ?? 0); // mayor iniciativa primero
-        });
-        
-        let hayCambio = false;
-        for (let i = 0; i < sorted.length; i++) {
-            if (sorted[i] !== contenedor.children[i]) {
-                hayCambio = true;
-                break;
-            }
-        }
-
-        // Solo reanexar si hay cambio
-        
     });
-    sorted.forEach(el => contenedor.appendChild(el));
+
+    const contenedor = document.getElementById('personajes-dashboard');
+    ordenarPorIniciativa(contenedor, data.personajes);
+
+}
+
+// Ordenar personajes
+function ordenarPorIniciativa(contenedor, personajes) {
+    const sorted = [...contenedor.children].sort((a, b) => {
+        const pa = personajes.find(p => `personaje-${p.nombre}` === a.id);
+        const pb = personajes.find(p => `personaje-${p.nombre}` === b.id);
+        return (pb?.iniciativa ?? 0) - (pa?.iniciativa ?? 0);
+    });
+
+    let hayCambio = sorted.some((el, i) => el !== contenedor.children[i]);
+    if (hayCambio) sorted.forEach(el => contenedor.appendChild(el));
 }
 
 // Llamada inicial
