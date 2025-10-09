@@ -218,7 +218,7 @@ def agregar_enemigo_api():
     while nombre.lower() in nombres_existentes:
         nombre = f"{nombre_base}{contador}"
         contador += 1
-
+    
     # Crear nuevo enemigo
     nuevo = {
         "nombre": nombre,

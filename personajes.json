@@ -1,5 +1,5 @@
 {
-    "ronda": 1,
+    "ronda": 0,
     "personajes": [
         {
             "nombre": "Vaelora",
@@ -60,18 +60,6 @@
             "iniciativa": 17,
             "tipo": "character",
             "turno": false
-        },
-        {
-            "nombre": "Espino1",
-            "vida_actual": 0,
-            "vida_max": 22,
-            "heridas": 0,
-            "shock": 0,
-            "imagen": "enemy.png",
-            "estados": [],
-            "iniciativa": 19,
-            "turno": false,
-            "tipo": "enemy"
         }
     ]
 }
