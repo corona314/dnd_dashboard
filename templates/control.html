@@ -90,6 +90,7 @@
 <div id="personajes-control"></div>
 
 <script>
+    
 let personajes = [];
 let ronda = 0;
 let turnoActual = 0;
@@ -485,27 +486,44 @@ async function cargarListaAPI() {
   }
 }
 
-// Renderiza la lista completa (o filtrada)
-function renderListaAPI(filtro = "") {
+// Renderiza la lista completa o filtrada
+function renderListaAPI(listaOpcional) {
   const sel = document.getElementById("enemigoAPI");
-  if (!listaEnemigosAPI.length) {
+  const lista = listaOpcional || listaEnemigosAPI;
+
+  if (!lista.length) {
     sel.innerHTML = "<option>No se encontraron enemigos</option>";
     return;
   }
 
-  const filtrados = listaEnemigosAPI
-    .filter(n => n.toLowerCase().includes(filtro.toLowerCase()))
-    .slice(0, 100); // solo primeros 100 para rendimiento
-
-  sel.innerHTML = filtrados.length
-    ? filtrados.map(n => `<option>${n}</option>`).join("")
-    : "<option>Sin coincidencias</option>";
+  sel.innerHTML = lista
+    .slice(0, 100) // solo primeros 100 para rendimiento
+    .map(n => `<option>${n}</option>`)
+    .join("");
 }
 
 // Filtrar enemigos mientras se escribe
 function filtrarListaAPI() {
-  const filtro = document.getElementById("busquedaAPI").value;
-  renderListaAPI(filtro);
+  const filtro = document.getElementById("busquedaAPI").value.trim().toLowerCase();
+
+  if (!filtro) {
+    renderListaAPI(); // si está vacío, muestra todo
+    return;
+  }
+
+  // Filtrar los que comienzan por el texto
+  const empiezaCon = listaEnemigosAPI.filter(n =>
+    n.toLowerCase().startsWith(filtro)
+  );
+
+  // Filtrar los que lo contienen (pero no comienzan)
+  const contiene = listaEnemigosAPI.filter(n =>
+    n.toLowerCase().includes(filtro) && !n.toLowerCase().startsWith(filtro)
+  );
+
+  const resultados = [...empiezaCon, ...contiene];
+
+  renderListaAPI(resultados);
 }
 
 // Agregar el enemigo seleccionado

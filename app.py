@@ -195,7 +195,9 @@ def agregar_enemigo_api():
         return jsonify({"error": "Debe proporcionar un nombre"}), 400
 
     # Llamar a la API
-    resp = requests.get("https://api.open5e.com/monsters/", params={"search": nombre})
+    url = "https://api.open5e.com/monsters/"
+    params = {"name": nombre}
+    resp = requests.get(url, params=params)    
     if resp.status_code != 200:
         return jsonify({"error": "No se pudo obtener datos de la API"}), 500
 
@@ -208,7 +210,7 @@ def agregar_enemigo_api():
 
     # Extraer atributos
     vida_max = monster.get("hit_points", 10)
-
+    print(monster)
     personajes = cargar_personajes()
 
     # Generar nombre único
