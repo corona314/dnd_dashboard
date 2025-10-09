@@ -47,7 +47,7 @@
             "estados": [],
             "iniciativa": 11,
             "tipo": "character",
-            "turno": true
+            "turno": false
         },
         {
             "nombre": "Jögur",
@@ -59,7 +59,7 @@
             "estados": [],
             "iniciativa": 17,
             "tipo": "character",
-            "turno": false
+            "turno": true
         }
     ]
 }
