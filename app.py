@@ -1,3 +1,4 @@
+import random
 from flask import Flask, render_template, request, jsonify
 import json
 import requests
@@ -228,7 +229,7 @@ def agregar_enemigo_api():
         "shock": 0,
         "imagen": "enemy.png",
         "estados": [],
-        "iniciativa": 30,
+        "iniciativa": random.randint(1,20)+(monster.get("dexterity")-10)/2,
         "turno": False,
         "tipo": "enemy"
     }
