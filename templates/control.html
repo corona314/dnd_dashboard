@@ -10,79 +10,82 @@
 <!-- Contenedor principal con dos columnas -->
 <div id="dashboard" style="display:flex; align-items:flex-start;">
 
-    <!-- Columna izquierda -->
-    <div id="columna-izquierda" style="flex:1;">
-        <h1>Control DnD</h1>
-    <div id="ronda-titulo">Ronda: 0</div>
-    <button class="button" onclick="pasarTurno()">Pasar turno</button>
+<!-- Columna izquierda -->
+<div id="columna-izquierda" style="flex:1;">
+    <h1>Control DnD</h1>
+    <button class="button button-red" onclick="reiniciarTurnos()">Reiniciar</button>
+    <div>
+        <label id="ronda-titulo">Ronda: 0</label>
+        <button class="button" onclick="pasarTurno()">Pasar turno</button>
+    </div>
 
         <!-- Estados normales -->
-        <section>
-            <div>
-                <h3 style="margin-right:20px; display:inline-block;">Estados</h3>
-                <label>Personaje:</label>
-                <select id="personaje-estado"></select>
+    <section>
+        <div>
+            <h3 style="margin-right:20px; display:inline-block;">Estados</h3>
+            <label>Personaje:</label>
+            <select id="personaje-estado"></select>
 
-                <label>Estado:</label>
-                <select id="estado-seleccionado">
-                    <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
-                    <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
-                    <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
-                    <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
-                </select>
-            </div>
-            <div>
-                <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
-                <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
-            </div>
+            <label>Estado:</label>
+            <select id="estado-seleccionado">
+                <option>Agarrado</option><option>Apresado</option><option>Asustado</option><option>Aturdido</option>
+                <option>Cansancio</option><option>Cegado</option><option>Derribado</option><option>Ensordecido</option>
+                <option>Envenenado</option><option>Hechizado</option><option>Incapacitado</option><option>Inconsciente</option>
+                <option>Invisible</option><option>Paralizado</option><option>Petrificado</option>
+            </select>
+        </div>
+        <div>
+            <button class="button" onclick="agregarEstadoNormal()">Agregar estado</button>
+            <button class="button" onclick="quitarEstadoNormal()">Quitar estado</button>
+        </div>
 
-            <!-- Enfermedades -->
-            <div>
-                <h3 style="margin-right:20px; display:inline-block;">Enfermedades</h3>
-                <label>Personaje:</label>
-                <select id="personaje-enfermedad"></select>
-                <label>Enfermedad:</label>
-                <select id="enfermedad-seleccionada"></select>
-            </div>
-            <div>
-                <button class="button" onclick="agregarEnfermedad()">Agregar enfermedad</button>
-                <button class="button" onclick="quitarEnfermedad()">Quitar enfermedad</button>
-            </div>
-        </section>
-    </div>
+        <!-- Enfermedades -->
+        <div>
+            <h3 style="margin-right:20px; display:inline-block;">Enfermedades</h3>
+            <label>Personaje:</label>
+            <select id="personaje-enfermedad"></select>
+            <label>Enfermedad:</label>
+            <select id="enfermedad-seleccionada"></select>
+        </div>
+        <div>
+            <button class="button" onclick="agregarEnfermedad()">Agregar enfermedad</button>
+            <button class="button" onclick="quitarEnfermedad()">Quitar enfermedad</button>
+        </div>
+    </section>
+</div>
 
     <!-- Columna derecha -->
-    <div id="columna-derecha" style="flex:1;">
-        <!-- Personajes -->
-        <section>
-            <div>
-                <h3 style="margin-right:20px; margin-top:40px; display:inline-block;">Agregar Personaje</h3>
-                <label for="nombrePersonaje">Nombre Personaje:</label>
-                <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Ej. Goblin">
-                <select id="tipoPersonaje">
-                    <option>Enemigo</option><option>NPC</option><option>Personaje</option>
-                </select>
-            </div>
-            <div>
-                <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
-                <button class="button" onclick="eliminarPersonaje()">Eliminar Personaje</button>
-            </div>
+<div id="columna-derecha" style="flex:1;">
+    <!-- Personajes -->
+    <section>
+        <div>
+            <h3 style="margin-right:20px; margin-top:40px; display:inline-block;">Agregar Personaje</h3>
+            <label for="nombrePersonaje">Nombre Personaje:</label>
+            <input type="text" class="input input-large" id="nombrePersonaje" required placeholder="Ej. Velzo">
+            <select id="tipoPersonaje">
+                <option>Enemigo</option><option>NPC</option><option>Personaje</option>
+            </select>
+        </div>
+        <div>
+            <button class="button" onclick="agregarPersonaje()">Agregar Personaje</button>
+            <button class="button" onclick="eliminarPersonaje()">Eliminar Personaje</button>
+        </div>
 
-            <!-- Enemigos desde API -->
-            <div>
-                <h3 style="margin-right:20px; display:inline-block;">Enemigos API</h3>
-                <label for="enemigoAPI">Buscar enemigo:</label>
-                <input type="text" class="input input-large" id="busquedaAPI" placeholder="Escribe para filtrar..." oninput="filtrarListaAPI()">
-            </div>
-            <div>
-                <select id="enemigoAPI" size="6" style="width: 250px;"></select>
-            </div>
-            <div>
-                <button class="button" onclick="agregarDesdeAPISeleccionado()">Agregar enemigo desde API</button>
-                <button class="button" onclick="eliminarEnemigos()">Eliminar Enemigos</button>
-            </div>
-        </section>
-    </div>
+        <!-- Enemigos desde API -->
+        <div>
+            <h3 style="margin-right:20px; display:inline-block;">Enemigos API</h3>
+            <label for="enemigoAPI">Buscar enemigo:</label>
+            <input type="text" class="input input-large" id="busquedaAPI" placeholder="Ej. Goblin" oninput="filtrarListaAPI()">
+        </div>
+        <div>
+            <select id="enemigoAPI" size="5" style="width: 250px;"></select>
+        </div>
+        <div>
+            <button class="button" onclick="agregarDesdeAPISeleccionado()">Agregar enemigo desde API</button>
+            <button class="button" onclick="eliminarEnemigos()">Eliminar Enemigos</button>
+        </div>
+    </section>
+</div>
 
 </div>
 
@@ -92,7 +95,6 @@
 <script>
 
 let personajes = [];
-let ronda = 0;
 let turnoActual = 0;
 let initialized = false;
 
@@ -124,19 +126,10 @@ async function fetchData() {
     const data = await res.json();
     personajes = data.personajes;
 
-    if (!initialized) {
-        ronda = 0;
-        document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
-        await fetch('/actualizar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ronda: 0 })
-        });
-        initialized = true;
-    } else {
-        ronda = data.ronda ?? ronda;
-        document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
-    }
+    // Usar la ronda del servidor si existe, sino 0
+    ronda = data.ronda ?? 0;
+    document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
+
     renderPersonajes();
     renderPersonajeSelects();
     renderEnfermedadesSelect();
@@ -173,15 +166,17 @@ function renderPersonajes() {
                 <div class="barra">
                     <div class="barra-vida" style="width:${barraAncho}%; background-color:${colorBarra(p.vida_actual,p.vida_max)};"></div>
                 </div>
+            </div>
+            <div class="vida-fila">
+                <span id="vida-label-${i}" class="stat-label">${p.vida_actual}/${p.vida_max}</span>
                 <button class="button" onclick="ocultarVida(${i}, ${p.vida_visible})">
                     ${p.vida_visible ? 'Ocultar' : 'Mostrar'}
                 </button>
             </div>
-            <span id="vida-label-${i}" class="stat-label">${p.vida_actual}/${p.vida_max}</span><br>
-
-            <button class="button button-red" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
-            <button class="button button-blue" onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
-
+            <div>
+                <button class="button button-red" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
+                <button class="button button-blue" onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
+            </div>
             <label class="label">Delta:</label>
             <input type="text" id="vida-${i}" value="0" class="input">
             <button class="button" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
@@ -420,16 +415,69 @@ async function quitarEnfermedad() {
     renderEnfermedadesSelect();
 }
 
-async function pasarTurno() {
+async function reiniciarTurnos() {
+    const confirmar = confirm("¿Seguro que quieres reiniciar los turnos y poner la ronda a 0?");
+    if (!confirmar) return;
+
     if (personajes.length === 0) return;
+
+    // Ordenar por iniciativa descendente
     const turnoIndices = personajes.map((_, i) => i)
         .sort((a, b) => (personajes[b].iniciativa || 0) - (personajes[a].iniciativa || 0));
-    personajes.forEach(p => p.turno = false);
-    const idx = turnoIndices[turnoActual];
-    personajes[idx].turno = true;
-    const turnoNombre = personajes[idx].nombre;
 
-    if (turnoActual === 0) {
+    // Limpiar los turnos
+    personajes.forEach(p => p.turno = false);
+
+    // Poner al de mayor iniciativa
+    const idx = turnoIndices[0];
+    personajes[idx].turno = true;
+
+    // Reiniciar ronda
+    ronda = 0;
+
+    await fetch('/actualizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ turno: personajes[idx].nombre, ronda })
+    });
+
+    turnoActual = 0; // reiniciamos el índice
+    renderPersonajes();
+    document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
+}
+
+async function pasarTurno() {
+    if (personajes.length === 0) return;
+    // Ordenar por iniciativa descendente
+    const turnoIndices = personajes.map((_, i) => i)
+        .sort((a, b) => (personajes[b].iniciativa || 0) - (personajes[a].iniciativa || 0));
+    // Buscar índice del turno actual
+    let idxActual = turnoIndices.findIndex(i => personajes[i].turno);
+    if (idxActual === -1) {
+        // Ningún turno activo, pasamos al de mayor iniciativa
+        personajes.forEach(p => p.turno = false);
+        idxActual = 0;
+        personajes[turnoIndices[idxActual]].turno = true;
+        await fetch('/actualizar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ turno: personajes[turnoIndices[idxActual]].nombre })
+        });
+        turnoActual = 0;
+        renderPersonajes();
+        return;
+    }
+
+    // Limpiar todos los turnos
+    personajes.forEach(p => p.turno = false);
+
+    // Siguiente turno
+    idxActual = (idxActual + 1) % turnoIndices.length;
+    personajes[turnoIndices[idxActual]].turno = true;
+    const turnoNombre = personajes[turnoIndices[idxActual]].nombre;
+
+    // Incrementar ronda si hemos dado la vuelta completa
+    if (idxActual === 0) {
         ronda = (ronda === 0) ? 1 : (ronda + 1);
     }
 
@@ -439,7 +487,7 @@ async function pasarTurno() {
         body: JSON.stringify({ turno: turnoNombre, ronda })
     });
 
-    turnoActual = (turnoActual + 1) % turnoIndices.length;
+    turnoActual = idxActual;
     renderPersonajes();
     document.getElementById('ronda-titulo').textContent = `Ronda: ${ronda}`;
 }
@@ -512,7 +560,7 @@ function renderListaAPI(listaOpcional) {
   }
 
   sel.innerHTML = lista
-    .slice(0, 100) // solo primeros 100 para rendimiento
+    .slice(0, 120) // solo primeros 100 para rendimiento
     .map(n => `<option>${n}</option>`)
     .join("");
 }
