@@ -173,13 +173,11 @@ function renderPersonajes() {
                     ${p.vida_visible ? 'Ocultar' : 'Mostrar'}
                 </button>
             </div>
-            <div>
-                <button class="button button-red" onclick="modificar(${i}, 'vida', 1)">+Vida</button>
-                <button class="button button-blue" onclick="modificar(${i}, 'vida', -1)">-Vida</button><br>
+            <div class="contenedor">
+                <input type="text" id="vida-${i}" value="0" class="input">
+                <button class="button button-red" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0, 1)">Curar</button>
+                <button class="button button-blue" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0, -1)">Dañar</button><br>
             </div>
-            <label class="label">Delta:</label>
-            <input type="text" id="vida-${i}" value="0" class="input">
-            <button class="button" onclick="modificar(${i}, 'vida', parseInt(document.getElementById('vida-${i}').value) || 0)">Aplicar</button><br>
 
             <label class="label">Vid.M:</label>
             <input type="text" id="vidaMax-${i}" value="${p.vida_max}" class="input">
@@ -200,15 +198,15 @@ function renderPersonajes() {
     cont.appendChild(fila);
 }
 
-async function modificar(i, tipo, cantidad = 0) {
+async function modificar(i, tipo, cantidad = 0, signo = 1) {
     const p = personajes[i];
     let vida = p.vida_actual || 0;
     let heridas = p.heridas || 0;
     let shock = p.shock || 0;
-
     if (tipo === 'vida') {
-        const delta = Number(cantidad) || 0;
-        vida = Math.max(0, Math.min(p.vida_max || Infinity, (p.vida_actual || 0) + delta));
+
+        const delta = Number(cantidad) || 1;
+        vida = Math.max(0, Math.min(p.vida_max || Infinity, (p.vida_actual || 0) + signo*delta));
     }
     if (tipo === 'heridas') {
         const heridas_antes = p.heridas || 0;
