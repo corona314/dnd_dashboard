@@ -90,7 +90,7 @@
 <div id="personajes-control"></div>
 
 <script>
-    
+
 let personajes = [];
 let ronda = 0;
 let turnoActual = 0;
@@ -169,8 +169,13 @@ function renderPersonajes() {
         div.className = 'personaje';
         div.innerHTML = `
             <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
-            <div class="barra">
-                <div class="barra-vida" style="width:${barraAncho}%;background-color:${colorBarra(p.vida_actual,p.vida_max)}"></div>
+            <div class="barra-contenedor">
+                <div class="barra">
+                    <div class="barra-vida" style="width:${barraAncho}%; background-color:${colorBarra(p.vida_actual,p.vida_max)};"></div>
+                </div>
+                <button class="button" onclick="ocultarVida(${i}, ${p.vida_visible})">
+                    ${p.vida_visible ? 'Ocultar' : 'Mostrar'}
+                </button>
             </div>
             <span id="vida-label-${i}" class="stat-label">${p.vida_actual}/${p.vida_max}</span><br>
 
@@ -455,6 +460,16 @@ async function eliminarEnemigos() {
     }
 
     // Actualizamos la lista local y la interfaz
+    await fetchData();
+}
+
+async function ocultarVida(i) {
+    const p = personajes[i];
+    await fetch('/actualizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: p.nombre, ocultar: true})
+    });
     await fetchData();
 }
 

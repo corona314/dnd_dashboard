@@ -61,7 +61,12 @@ function crearPersonajeHTML(p){
             <h2>${p.nombre}</h2>
         </div>
         <img src="/static/images/${p.imagen}" alt="${p.nombre}" width="100">
-        <div class="vida"><div class="barra" style="width:${ancho}%; background-color:${colorBarra(p.vida_actual,p.vida_max)};"></div></div>
+        <div class="vida">
+            <div class="barra" style="
+                width:${p.vida_visible ? ancho : 100}%;
+                background-color:${p.vida_visible ? colorBarra(p.vida_actual, p.vida_max) : '#000'};
+            "></div>
+        </div>
         ${heridasShockHTML}
         <div class="estados">${estadosHTML}</div>
     </div>`;
@@ -87,12 +92,19 @@ async function actualizarDashboard(){
 
         const prev = personajesPrev[p.nombre] || {};
 
-        // Actualizar vida
-        if(prev.vida_actual !== p.vida_actual || prev.vida_max !== p.vida_max){
-            const barra = div.querySelector('.barra');
-            barra.style.width = `${(p.vida_actual/p.vida_max)*100}%`;
-            barra.style.backgroundColor = colorBarra(p.vida_actual,p.vida_max);
+        // Actualizar visibilidad y vida
+        let vidaDiv = div.querySelector('.vida');
+        if (vidaDiv) {
+            const barra = vidaDiv.querySelector('.barra');
+            if (p.vida_visible) {
+                barra.style.width = `${(p.vida_actual / p.vida_max) * 100}%`;
+                barra.style.backgroundColor = colorBarra(p.vida_actual, p.vida_max);
+            } else {
+                barra.style.width = '100%';
+                barra.style.backgroundColor = '#555';
+            }
         }
+        
 
         // Actualizar shock y turno
         if(prev.shock !== p.shock || prev.turno !== p.turno){

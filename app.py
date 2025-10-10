@@ -15,13 +15,6 @@ def cargar_personajes():
     except FileNotFoundError:
         return []
 
-def cargar_ronda():
-    try:
-        with open("personajes.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-            return data.get("ronda", 0)
-    except FileNotFoundError:
-        return 0
 
 def guardar_personajes(personajes):
     try:
@@ -34,6 +27,13 @@ def guardar_personajes(personajes):
     with open("personajes.json", "w", encoding="utf-8") as f:
         json.dump({"ronda": ronda, "personajes": personajes}, f, ensure_ascii=False, indent=4)
 
+def cargar_ronda():
+    try:
+        with open("personajes.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data.get("ronda", 0)
+    except FileNotFoundError:
+        return 0
 
 def guardar_ronda(ronda):
     try:
@@ -94,7 +94,8 @@ def actualizar():
                     p["shock"] = max(0, min(3, data["shock"]))
                 if "iniciativa" in data:
                     p["iniciativa"] = data["iniciativa"]
-                    
+    
+    # Actualizar estados                
     if "estado_accion" in data and "estado" in data and "nombre" in data:
         estado = data["estado"]
         accion = data["estado_accion"]
@@ -144,10 +145,18 @@ def actualizar():
     if "ronda" in data:
         ronda_actual = data["ronda"]
 
-    personaje_accion = data.get("personaje_accion")
-    nombre = data.get("nombre")
+    if "vida_visible" in data:
+        for p in personajes:
+            if p["nombre"] == data["nombre"]:
+                p["vida_visible"] = bool(data["vida_visible"])
+    elif "ocultar" in data:
+        for p in personajes:
+            if p["nombre"] == data["nombre"]:
+                p["vida_visible"] = not p.get("vida_visible", True)
 
     # Agregar personaje
+    personaje_accion = data.get("personaje_accion")
+    nombre = data.get("nombre")
     if personaje_accion == "agregar" and nombre and "tipo" in data:
         tipo = data["tipo"]
         if tipo == "Personaje": tipo = "character"
@@ -164,6 +173,7 @@ def actualizar():
             "iniciativa": 1,
             "turno": False,
             "tipo": tipo,
+            "vida_visible": True
         }
         personajes.append(nuevo_personaje)
 
@@ -234,7 +244,8 @@ def agregar_enemigo_api():
         "estados": [],
         "iniciativa": random.randint(1,20)+ math.floor((monster.get("dexterity")-10)/2),
         "turno": False,
-        "tipo": "enemy"
+        "tipo": "enemy",
+        "vida_visible": True
     }
 
     personajes.append(nuevo)

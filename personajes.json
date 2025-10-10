@@ -11,11 +11,12 @@
             "estados": [],
             "iniciativa": -5,
             "tipo": "character",
-            "turno": false
+            "turno": false,
+            "vida_visible": true
         },
         {
             "nombre": "Ken",
-            "vida_actual": 20,
+            "vida_actual": 12,
             "vida_max": 20,
             "heridas": 0,
             "shock": 0,
@@ -23,7 +24,8 @@
             "estados": [],
             "iniciativa": 8,
             "tipo": "character",
-            "turno": false
+            "turno": false,
+            "vida_visible": true
         },
         {
             "nombre": "Adelgo",
@@ -35,11 +37,12 @@
             "estados": [],
             "iniciativa": 10,
             "tipo": "character",
-            "turno": false
+            "turno": false,
+            "vida_visible": true
         },
         {
             "nombre": "Lillie",
-            "vida_actual": 21,
+            "vida_actual": 12,
             "vida_max": 26,
             "heridas": 0,
             "shock": 0,
@@ -47,11 +50,12 @@
             "estados": [],
             "iniciativa": 11,
             "tipo": "character",
-            "turno": false
+            "turno": false,
+            "vida_visible": true
         },
         {
             "nombre": "Jögur",
-            "vida_actual": 24,
+            "vida_actual": 18,
             "vida_max": 24,
             "heridas": 0,
             "shock": 0,
@@ -59,7 +63,8 @@
             "estados": [],
             "iniciativa": 17,
             "tipo": "character",
-            "turno": true
+            "turno": true,
+            "vida_visible": true
         }
     ]
 }

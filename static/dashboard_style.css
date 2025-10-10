@@ -133,6 +133,9 @@ body::after {
     margin: 5px 0;
     border-radius: 5px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .barra {
