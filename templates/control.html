@@ -94,6 +94,14 @@
 
 <script>
 
+// Cargar JSON de descripciones
+let descripcionesEstados = {};
+fetch('../static/descripcionesEstados.json')
+  .then(res => res.json())
+  .then(data => {
+      descripcionesEstados = data;
+      renderPersonajes(); // render inicial con tooltips
+  });
 let personajes = [];
 let turnoActual = 0;
 let initialized = false;
@@ -159,6 +167,14 @@ function renderPersonajes() {
           `
         : "";
 
+        // Tooltips
+        const estadosHTML = (p.estados || []).length
+            ? p.estados.map(e => {
+                return `<span class="estado">${e}<span class="tooltip">${descripcionesEstados[e] || "Sin descripción"}</span></span>`;
+            }).join(' ')
+            : `<span class="estado">Ninguno</span>`;
+
+
         div.className = 'personaje';
         div.innerHTML = `
             <strong>${p.nombre}</strong> ${p.turno ? "<span style='color:yellow'>(Turno)</span>" : ""}<br>
@@ -190,7 +206,7 @@ function renderPersonajes() {
             <button class="button" onclick="aplicarIniciativa(${i})">Aplicar</button><br>
 
             <label class="label">Estados:</label>
-            <span id="estados-${i}" class="stat-label">${(p.estados || []).join(', ')}</span>
+            <div id="estados-${i}" class="stat-label">${estadosHTML}</div>
         `;
         fila.appendChild(div);
     });

@@ -1,5 +1,5 @@
 {
-    "Agarrado": "Velocidad = 0. Este estado termina si quien agarra queda incapacitado o si algún efecto aleja a la criatura de quien (o lo que) la tiene agarrada",
+    "Agarrado": "Velocidad = 0. Este estado termina si quien agarra queda incapacitado o si algún efecto aleja a la criatura de quien (o de lo que) la tiene agarrada",
     "Apresado": "Velocidad = 0. Ataques contra la criatura: ventaja. Ataques hechos por la criatura: desventaja. Desventaja en las salvaciones de Destreza",
     "Asustado": "Desventaja en las pruebas de característica y tiradas de ataque mientras pueda ver a la fuente de su miedo. La criatura no puede acercase a la fuente de su miedo voluntariamente",
     "Aturdido": "Fallo automático de salvaciones de Fuerza y Destreza. Tiradas de ataque contra la criatura: ventaja",
