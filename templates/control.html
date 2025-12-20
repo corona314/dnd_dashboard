@@ -92,6 +92,8 @@
 
             <select id="chars-guardados"></select>
             <button class="button" onclick="cargarCharSeleccionado()">Cargar</button>
+            <button class="button button-red" onclick="eliminarCharGuardado()">Eliminar seleccionado</button>
+
         </div>
     </section>
 </div>
@@ -151,6 +153,8 @@ async function fetchData() {
     renderPersonajeSelects();
     renderEnfermedadesSelect();
     actualizarSelectorGuardar();
+    actualizarDropdownChars();
+
 }
 
 function renderPersonajes() {
@@ -321,14 +325,12 @@ function actualizarSelectorGuardar() {
     const sel = document.getElementById("char-a-guardar");
     sel.innerHTML = "";
 
-    const chars = personajes.filter(p => p.tipo === "character");
-
-    if (!chars.length) {
-        sel.innerHTML = `<option disabled selected>No hay characters</option>`;
+    if (!personajes.length) {
+        sel.innerHTML = `<option disabled selected>No hay personajes</option>`;
         return;
     }
 
-    chars.forEach(p => {
+    personajes.forEach(p => {
         sel.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
     });
 }
@@ -386,9 +388,8 @@ function guardarCharSeleccionado() {
     const nombre = sel.value;
     if (!nombre) return;
 
-    const char = personajes.find(
-        p => p.nombre === nombre && p.tipo === "character"
-    );
+    const char = personajes.find(p => p.nombre === nombre);
+
     if (!char) return;
 
     const guardados = JSON.parse(localStorage.getItem("chars_guardados") || "{}");
@@ -398,6 +399,20 @@ function guardarCharSeleccionado() {
     localStorage.setItem("chars_guardados", JSON.stringify(guardados));
 
     alert(`Character "${nombre}" guardado`);
+    actualizarDropdownChars();
+}
+
+function eliminarCharGuardado() {
+    const sel = document.getElementById("chars-guardados");
+    const nombre = sel.value;
+    if (!nombre) return;
+
+    const guardados = JSON.parse(localStorage.getItem("chars_guardados") || "{}");
+    if (!guardados[nombre]) return;
+
+    delete guardados[nombre];
+    localStorage.setItem("chars_guardados", JSON.stringify(guardados));
+    alert(`Character "${nombre}" eliminado de guardados`);
     actualizarDropdownChars();
 }
 
@@ -727,6 +742,7 @@ async function agregarDesdeAPISeleccionado() {
       return;
     }
     await fetchData();
+    actualizarSelectorGuardar();
   } catch (e) {
     console.error("Error al conectar con el servidor:", e);
     alert("No se pudo conectar con el servidor.");

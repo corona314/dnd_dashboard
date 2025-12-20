@@ -70,6 +70,19 @@
             "turno": false,
             "tipo": "character",
             "vida_visible": true
+        },
+        {
+            "nombre": "Polar Bear",
+            "vida_actual": 42,
+            "vida_max": 42,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "enemy.png",
+            "estados": [],
+            "iniciativa": 18,
+            "turno": false,
+            "tipo": "enemy",
+            "vida_visible": true
         }
     ]
 }
