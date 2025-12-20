@@ -8,7 +8,9 @@
             "heridas": 0,
             "shock": 0,
             "imagen": "vaelora.png",
-            "estados": [],
+            "estados": [
+                "Somnolencia Letárgica (Leve)"
+            ],
             "iniciativa": 3,
             "tipo": "character",
             "turno": false,
@@ -28,23 +30,10 @@
             "vida_visible": true
         },
         {
-            "nombre": "Adelgo",
-            "vida_actual": 21,
-            "vida_max": 21,
-            "heridas": 1,
-            "shock": 0,
-            "imagen": "adelgo.jpeg",
-            "estados": [],
-            "iniciativa": 10,
-            "tipo": "character",
-            "turno": false,
-            "vida_visible": true
-        },
-        {
             "nombre": "Lillie",
             "vida_actual": 26,
             "vida_max": 26,
-            "heridas": 0,
+            "heridas": 1,
             "shock": 0,
             "imagen": "lillie.png",
             "estados": [],
@@ -55,15 +44,31 @@
         },
         {
             "nombre": "Jögur",
-            "vida_actual": 21,
-            "vida_max": 21,
+            "vida_actual": 32,
+            "vida_max": 43,
             "heridas": 1,
             "shock": 0,
-            "imagen": "jormungandr.jpg",
-            "estados": [],
-            "iniciativa": 17,
+            "imagen": "character.png",
+            "estados": [
+                "Sombra Consumidora (Leve)",
+                "Verruga Astral (Leve)"
+            ],
+            "iniciativa": 1,
+            "turno": false,
             "tipo": "character",
-            "turno": true,
+            "vida_visible": true
+        },
+        {
+            "nombre": "Adelgo",
+            "vida_actual": 37,
+            "vida_max": 50,
+            "heridas": 0,
+            "shock": 0,
+            "imagen": "character.png",
+            "estados": [],
+            "iniciativa": 1,
+            "turno": false,
+            "tipo": "character",
             "vida_visible": true
         }
     ]

@@ -84,6 +84,15 @@
             <button class="button" onclick="agregarDesdeAPISeleccionado()">Agregar enemigo desde API</button>
             <button class="button" onclick="eliminarEnemigos()">Eliminar Enemigos</button>
         </div>
+        <div>
+            <h3 style="margin-right:20px; display:inline-block;">Guardar/Cargar</h3>
+            <select id="char-a-guardar"></select>
+
+            <button class="button" onclick="guardarCharSeleccionado()">Guardar</button>
+
+            <select id="chars-guardados"></select>
+            <button class="button" onclick="cargarCharSeleccionado()">Cargar</button>
+        </div>
     </section>
 </div>
 
@@ -141,6 +150,7 @@ async function fetchData() {
     renderPersonajes();
     renderPersonajeSelects();
     renderEnfermedadesSelect();
+    actualizarSelectorGuardar();
 }
 
 function renderPersonajes() {
@@ -305,6 +315,90 @@ async function eliminarPersonaje() {
     });
     await fetchData();
 
+}
+
+function actualizarSelectorGuardar() {
+    const sel = document.getElementById("char-a-guardar");
+    sel.innerHTML = "";
+
+    const chars = personajes.filter(p => p.tipo === "character");
+
+    if (!chars.length) {
+        sel.innerHTML = `<option disabled selected>No hay characters</option>`;
+        return;
+    }
+
+    chars.forEach(p => {
+        sel.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
+    });
+}
+
+function actualizarDropdownChars() {
+    const sel = document.getElementById("chars-guardados");
+    const guardados = JSON.parse(localStorage.getItem("chars_guardados") || "{}");
+
+    sel.innerHTML = "";
+
+    const nombres = Object.keys(guardados);
+    if (!nombres.length) {
+        sel.innerHTML = `<option disabled selected>No hay characters guardados</option>`;
+        return;
+    }
+
+    nombres.forEach(nombre => {
+        sel.innerHTML += `<option value="${nombre}">${nombre}</option>`;
+    });
+}
+
+async function cargarCharSeleccionado() {
+    const sel = document.getElementById("chars-guardados");
+    const nombre = sel.value;
+    if (!nombre) return;
+
+    const guardados = JSON.parse(localStorage.getItem("chars_guardados") || {});
+    const char = guardados[nombre];
+    if (!char) return;
+
+    // Si ya existe en la sesión, lo eliminamos primero
+    if (personajes.some(p => p.nombre === nombre)) {
+        await fetch("/actualizar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, personaje_accion: "eliminar" })
+        });
+    }
+
+    // Volvemos a agregarlo completo
+    await fetch("/actualizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            personaje_accion: "importar",
+            personaje: char
+        })
+    });
+
+    await fetchData();
+}
+
+function guardarCharSeleccionado() {
+    const sel = document.getElementById("char-a-guardar");
+    const nombre = sel.value;
+    if (!nombre) return;
+
+    const char = personajes.find(
+        p => p.nombre === nombre && p.tipo === "character"
+    );
+    if (!char) return;
+
+    const guardados = JSON.parse(localStorage.getItem("chars_guardados") || "{}");
+
+    guardados[nombre] = structuredClone(char); // sobrescribe si existe
+
+    localStorage.setItem("chars_guardados", JSON.stringify(guardados));
+
+    alert(`Character "${nombre}" guardado`);
+    actualizarDropdownChars();
 }
 
 function siguienteNivel(nombreEnf, nivelActual) {
@@ -641,7 +735,7 @@ async function agregarDesdeAPISeleccionado() {
 
 // Cargar la lista al inicio
 cargarListaAPI();
-
+actualizarDropdownChars();
 
 </script>
 

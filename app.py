@@ -180,7 +180,27 @@ def actualizar():
     # Eliminar personaje
     elif personaje_accion == "eliminar" and nombre:
         personajes = [p for p in personajes if p["nombre"] != nombre]
+    
+    # Importar personaje completo (desde guardado)
+    elif personaje_accion == "importar" and "personaje" in data:
+        p = data["personaje"]
 
+        # eliminar si ya existe uno con ese nombre
+        personajes = [x for x in personajes if x["nombre"] != p["nombre"]]
+
+        personajes.append({
+            "nombre": p["nombre"],
+            "vida_actual": p.get("vida_actual", 0),
+            "vida_max": p.get("vida_max", 0),
+            "heridas": p.get("heridas", 0),
+            "shock": p.get("shock", 0),
+            "imagen": p.get("imagen", "character.png"),
+            "estados": p.get("estados", []),
+            "iniciativa": p.get("iniciativa", 0),
+            "turno": False,  # nunca importes turno activo
+            "tipo": p.get("tipo", "character"),
+            "vida_visible": p.get("vida_visible", True)
+        })
     guardar_personajes(personajes)
     guardar_ronda(ronda_actual)
     return jsonify({"status": "ok"})
